@@ -18,7 +18,9 @@
   --reading-line-height: 1.7;
   --reading-title-weight: 600;
   --reading-body-weight: 400;
+  --content-font: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
   --custom-background: none;
+  --hero-bg: #20231f;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -58,7 +60,7 @@ body {
   background:
     linear-gradient(90deg, rgba(111, 97, 66, 0.025) 1px, transparent 1px) 0 0 / 24px 24px,
     var(--paper);
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  font-family: "Times New Roman", var(--content-font);
   font-size: 16px;
   line-height: 1.6;
   text-rendering: optimizeLegibility;
@@ -68,8 +70,15 @@ body {
   position: fixed;
   z-index: 0;
   inset: 0;
+  background-color: var(--paper);
   background-image:
-    linear-gradient(rgba(244, 241, 232, 0.84), rgba(244, 241, 232, 0.9)),
+    linear-gradient(rgba(244, 241, 232, 0.84), rgba(244, 241, 232, 0.91)),
+    var(--custom-background);
+  background-image:
+    linear-gradient(
+      color-mix(in srgb, var(--paper) 84%, transparent),
+      color-mix(in srgb, var(--paper) 91%, transparent)
+    ),
     var(--custom-background);
   background-position: center;
   background-size: cover;
@@ -78,7 +87,13 @@ body {
 
 html[data-theme="dark"] .app-background {
   background-image:
-    linear-gradient(rgba(12, 16, 13, 0.88), rgba(12, 16, 13, 0.94)),
+    linear-gradient(rgba(12, 16, 13, 0.87), rgba(12, 16, 13, 0.94)),
+    var(--custom-background);
+  background-image:
+    linear-gradient(
+      color-mix(in srgb, var(--paper) 87%, transparent),
+      color-mix(in srgb, var(--paper) 94%, transparent)
+    ),
     var(--custom-background);
 }
 
@@ -177,7 +192,7 @@ button {
   overflow: hidden;
   padding: 28px 24px 24px;
   color: #fff;
-  background: var(--ink);
+  background: var(--hero-bg);
   border-radius: 26px 26px 26px 8px;
   box-shadow: var(--shadow);
 }
@@ -638,6 +653,14 @@ button:disabled {
   background: var(--gold-soft);
 }
 
+.question-title,
+.option-text,
+.feedback p,
+.workspace-empty,
+.note-textarea {
+  font-family: "Times New Roman", var(--content-font);
+}
+
 .question-title {
   margin: 0 0 22px;
   font-size: calc(var(--reading-size) * 1.28);
@@ -695,7 +718,7 @@ button:disabled {
 
 .option-button.selected {
   border-color: var(--green);
-  background: #f3faf6;
+  background: var(--green-soft);
 }
 
 .option-button.selected .option-letter {
@@ -857,7 +880,7 @@ button:disabled {
   background:
     linear-gradient(90deg, rgba(110, 108, 94, 0.055) 1px, transparent 1px) 0 0 / 22px 22px,
     linear-gradient(rgba(110, 108, 94, 0.055) 1px, transparent 1px) 0 0 / 22px 22px,
-    #fffdf8;
+    var(--surface);
 }
 
 .drawing-canvas {
@@ -970,6 +993,7 @@ button:disabled {
 }
 
 .wrong-workspace {
+  position: relative;
   display: flex;
   height: calc(100dvh - 105px - var(--safe-bottom));
   min-height: 560px;
@@ -1017,6 +1041,22 @@ button:disabled {
 .question-drawing-canvas.active {
   pointer-events: auto;
   cursor: crosshair;
+}
+
+.workspace-overlay-canvas {
+  z-index: 5;
+}
+
+.overlay-active .workspace-title,
+.overlay-active .workspace-meta-actions,
+.overlay-active .overlay-tools,
+.overlay-active .workspace-controls {
+  position: relative;
+  z-index: 7;
+}
+
+.overlay-active .workspace-note {
+  pointer-events: none;
 }
 
 .overlay-tools {
@@ -1142,7 +1182,7 @@ button:disabled {
   flex: 1;
   padding: 14px 16px;
   resize: none;
-  color: #28302b;
+  color: var(--ink);
   border: 1px solid #d9d3c2;
   border-radius: 12px;
   outline: none;
@@ -1153,8 +1193,8 @@ button:disabled {
       transparent 27px,
       rgba(88, 112, 102, 0.18) 28px
     ),
-    #fffdf8;
-  font-family: "Kaiti SC", "STKaiti", "KaiTi", serif;
+    var(--surface);
+  font-family: "Times New Roman", var(--content-font);
   font-size: 16px;
   line-height: 28px;
 }
@@ -1483,6 +1523,94 @@ button:disabled {
   font-size: 12px;
 }
 
+.settings-select {
+  width: 100%;
+  min-height: 43px;
+  padding: 8px 12px;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  outline: none;
+  background: var(--paper);
+  font-size: 13px;
+}
+
+.settings-select:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 14%, transparent);
+}
+
+.font-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.font-choice {
+  min-height: 40px;
+  padding: 6px 4px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--paper);
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.font-choice.active {
+  color: #fff;
+  border-color: var(--green);
+  background: var(--green);
+  font-weight: 700;
+}
+
+.font-choice:nth-child(1) {
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+.font-choice:nth-child(2) {
+  font-family: "Songti SC", "SimSun", serif;
+}
+
+.font-choice:nth-child(3) {
+  font-family: "FangSong", "FangSong_GB2312", serif;
+}
+
+.font-choice:nth-child(4) {
+  font-family: "Kaiti SC", "KaiTi", serif;
+}
+
+.font-choice:nth-child(5) {
+  font-family: "Xingkai SC", "STXingkai", cursive;
+}
+
+.theme-preview-line {
+  display: flex;
+  min-height: 34px;
+  margin-top: 9px;
+  padding: 5px 8px;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.theme-preview-line span {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  border: 1px solid rgba(40, 40, 40, 0.12);
+  border-radius: 7px;
+}
+
+.theme-preview-line small {
+  overflow: hidden;
+  margin-left: 3px;
+  color: var(--muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .font-stepper {
   display: grid;
   grid-template-columns: 42px minmax(0, 1fr) 42px 54px;
@@ -1516,6 +1644,29 @@ button:disabled {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+}
+
+.drawing-mode-row {
+  display: flex;
+  min-height: 56px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.drawing-mode-switches {
+  display: flex;
+  flex: none;
+  gap: 10px;
+}
+
+.drawing-mode-switches label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 11px;
 }
 
 .switch {
@@ -1829,6 +1980,10 @@ html[data-theme="dark"] .option-letter {
 
   .sound-options {
     grid-template-columns: 1fr;
+  }
+
+  .font-choice-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 

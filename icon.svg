@@ -1,7 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="112" fill="#20231f"/>
-  <path d="M126 125h260c20 0 36 16 36 36v214c0 20-16 36-36 36H126c-20 0-36-16-36-36V161c0-20 16-36 36-36Z" fill="#f9f3df"/>
-  <path d="M152 188h208M152 246h132M152 304h166" stroke="#176b4e" stroke-width="23" stroke-linecap="round"/>
-  <circle cx="362" cy="339" r="66" fill="#176b4e"/>
-  <path d="m333 340 20 20 39-45" fill="none" stroke="#fff" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+  <defs>
+    <linearGradient id="cream" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff8db"/>
+      <stop offset="0.55" stop-color="#ffe9ad"/>
+      <stop offset="1" stop-color="#ffc86b"/>
+    </linearGradient>
+    <linearGradient id="orange" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f59a37"/>
+      <stop offset="1" stop-color="#df6f1f"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="118" fill="url(#cream)"/>
+  <rect x="24" y="24" width="464" height="464" rx="100" fill="none" stroke="#fff4ce" stroke-width="14"/>
+  <path d="M394 86c22 9 36 24 45 45" fill="none" stroke="#fff9e8" stroke-width="13" stroke-linecap="round" opacity=".85"/>
+  <rect x="92" y="82" width="328" height="348" rx="66" fill="#fffdf4" stroke="#ef8a2e" stroke-width="15"/>
+  <path d="M154 146h204M154 359h204" fill="none" stroke="#f3c875" stroke-width="13" stroke-linecap="round"/>
+  <text x="256" y="329" text-anchor="middle" font-family="Songti SC, SimSun, serif" font-size="238" font-weight="700" fill="#6d3c1e">肖</text>
+  <circle cx="392" cy="118" r="42" fill="url(#orange)"/>
+  <path d="m373 119 13 13 25-29" fill="none" stroke="#fffaf0" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

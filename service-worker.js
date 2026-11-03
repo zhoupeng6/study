@@ -1,12 +1,12 @@
-const CACHE_NAME = "xiao1000-v6";
+const CACHE_NAME = "xiao1000-v7";
 const APP_ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=20261103-6",
-  "./app.js?v=20261103-6",
-  "./icon.svg",
-  "./icon-192.png",
-  "./icon-512.png",
+  "./styles.css?v=20261103-7",
+  "./app.js?v=20261103-7",
+  "./icon.svg?v=20261103-7",
+  "./icon-192.png?v=20261103-7",
+  "./icon-512.png?v=20261103-7",
   "./manifest.webmanifest",
   "./data/questions.json"
 ];

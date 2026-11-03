@@ -11,6 +11,102 @@
     chime: "双铃",
     feather: "轻羽"
   };
+  const FONT_STACKS = {
+    sans: '"PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif',
+    song: '"Songti SC", "STSong", "SimSun", "Noto Serif CJK SC", serif',
+    fangsong: '"FangSong", "STFangsong", "FangSong_GB2312", serif',
+    kaiti: '"Kaiti SC", "STKaiti", "KaiTi", serif',
+    hand: '"Xingkai SC", "STXingkai", "Kaiti SC", "KaiTi", cursive'
+  };
+  const FONT_PRESETS = {
+    sans: "黑体",
+    song: "宋体",
+    fangsong: "仿宋",
+    kaiti: "楷体",
+    hand: "手写体"
+  };
+  const MUSIC_PRESETS = {
+    piano: "舒缓钢琴",
+    rain: "细雨白噪音",
+    stream: "山谷溪流",
+    forest: "林间微风"
+  };
+  const COLOR_SERIES = {
+    pink: [
+      { tone: "浅樱", paper: "#fff7f9", surface: "#fffdfd", deep: "#f5e5eb", accent: "#c76d8f", soft: "#fbe7ef", ink: "#382c31" },
+      { tone: "莓粉", paper: "#fceef3", surface: "#fff9fb", deep: "#f1d9e3", accent: "#b84e78", soft: "#f8dce8", ink: "#38262e" },
+      { tone: "深玫", paper: "#f5dfe8", surface: "#fff5f8", deep: "#e9c7d4", accent: "#923a61", soft: "#f2d1df", ink: "#342029" }
+    ],
+    green: [
+      { tone: "薄荷", paper: "#f2faf5", surface: "#fbfffc", deep: "#dff0e6", accent: "#4f8a6c", soft: "#e1f2e8", ink: "#27372f" },
+      { tone: "森绿", paper: "#eaf5ee", surface: "#f8fdfa", deep: "#d4e9dc", accent: "#367157", soft: "#d8eddf", ink: "#23352b" },
+      { tone: "墨绿", paper: "#dfeee5", surface: "#f4fbf7", deep: "#c4ddce", accent: "#245b45", soft: "#cfe5d8", ink: "#1f3026" }
+    ],
+    blue: [
+      { tone: "晴蓝", paper: "#f2f8fb", surface: "#fbfdff", deep: "#dfeef5", accent: "#4d7da2", soft: "#e2eff6", ink: "#26333b" },
+      { tone: "海蓝", paper: "#eaf3f8", surface: "#f8fcff", deep: "#d5e7f0", accent: "#326b91", soft: "#d9ebf4", ink: "#23323c" },
+      { tone: "靛蓝", paper: "#dfebf2", surface: "#f4faff", deep: "#c7dce8", accent: "#214f72", soft: "#cfe3ee", ink: "#202f39" }
+    ],
+    black: [
+      { tone: "雾灰", paper: "#f3f3f1", surface: "#fbfbf9", deep: "#e4e4df", accent: "#545956", soft: "#e8e9e6", ink: "#242725" },
+      { tone: "石墨", paper: "#eaeae7", surface: "#f7f7f4", deep: "#d8d8d3", accent: "#3f4441", soft: "#dedfdb", ink: "#1e211f" },
+      { tone: "曜黑", paper: "#dedfdb", surface: "#f1f2ef", deep: "#c9cac5", accent: "#292d2b", soft: "#d3d5d1", ink: "#171a18" }
+    ]
+  };
+
+  function characterThemes(prefix, label) {
+    const labels = { pink: "粉色", green: "绿色", blue: "蓝色", black: "黑色" };
+    return Object.entries(COLOR_SERIES).flatMap(([color, variants]) =>
+      variants.map((variant) => ({
+        id: `${prefix}-${color}-${variant.tone}`,
+        name: `${label} · ${labels[color]}${variant.tone}`,
+        family: prefix,
+        paper: variant.paper,
+        surface: variant.surface,
+        deep: variant.deep,
+        ink: variant.ink,
+        muted: "#716d70",
+        line: variant.deep,
+        accent: variant.accent,
+        soft: variant.soft,
+        red: "#b6403a",
+        redSoft: "#f9e4e1",
+        gold: "#9c742e",
+        goldSoft: "#f7edda",
+        hero: variant.ink
+      }))
+    );
+  }
+
+  const THEME_FAMILIES = [
+    {
+      label: "基础与马卡龙",
+      themes: [
+        { id: "paper", name: "原纸色", family: "paper", paper: "#f4f1e8", surface: "#fffdf8", deep: "#ebe6d8", ink: "#20231f", muted: "#77796e", line: "#ded9cc", accent: "#176b4e", soft: "#e4f1e9", red: "#b6403a", redSoft: "#fae9e7", gold: "#9f742b", goldSoft: "#f6ecd7", hero: "#20231f" },
+        { id: "macaron-strawberry", name: "马卡龙 · 草莓", family: "macaron", paper: "#fff4f6", surface: "#fffafb", deep: "#f7dfe6", ink: "#3b2c31", muted: "#806e73", line: "#eed5dd", accent: "#c97090", soft: "#fae3eb", red: "#b94f66", redSoft: "#f8e0e5", gold: "#a67840", goldSoft: "#f6ead8", hero: "#744a59" },
+        { id: "macaron-mint", name: "马卡龙 · 薄荷", family: "macaron", paper: "#f2faf6", surface: "#fbfffd", deep: "#dcefe5", ink: "#28362f", muted: "#6e7e75", line: "#d3e8dc", accent: "#62a888", soft: "#ddf2e8", red: "#b65b58", redSoft: "#f8e6e3", gold: "#9a7b3d", goldSoft: "#f4ecd8", hero: "#3d6858" },
+        { id: "macaron-lavender", name: "马卡龙 · 薰衣草", family: "macaron", paper: "#f7f3fb", surface: "#fdfbff", deep: "#e9e0f2", ink: "#332c3b", muted: "#786f82", line: "#e1d6ec", accent: "#8c72b1", soft: "#eae2f5", red: "#ad5d78", redSoft: "#f7e3e9", gold: "#967544", goldSoft: "#f3eadb", hero: "#584867" },
+        { id: "macaron-cream", name: "马卡龙 · 奶油黄", family: "macaron", paper: "#fff9eb", surface: "#fffdf8", deep: "#f6ebcf", ink: "#3d3527", muted: "#807666", line: "#eee1c4", accent: "#c08d45", soft: "#f8edda", red: "#b45d4a", redSoft: "#f8e5df", gold: "#9e7331", goldSoft: "#f5ead4", hero: "#6e5a3b" }
+      ]
+    },
+    { label: "名侦探柯南", themes: characterThemes("conan", "柯南") },
+    { label: "蜡笔小新", themes: characterThemes("shinchan", "蜡笔小新") },
+    {
+      label: "自然景观",
+      themes: [
+        { id: "nature-jungle", name: "丛林", family: "nature", paper: "#eef6ea", surface: "#f9fcf5", deep: "#dcebd3", ink: "#263526", muted: "#6e7c68", line: "#d3e4ca", accent: "#39764d", soft: "#dcefdc", red: "#aa5d48", redSoft: "#f4e5df", gold: "#947333", goldSoft: "#f1ead7", hero: "linear-gradient(135deg,#1f4931,#4d7148)" },
+        { id: "nature-mountain", name: "高山", family: "nature", paper: "#f1f4f4", surface: "#fbfcfb", deep: "#e0e6e4", ink: "#293333", muted: "#727c79", line: "#d5dfdc", accent: "#496f68", soft: "#e3efeb", red: "#aa5b4e", redSoft: "#f5e5e0", gold: "#92733b", goldSoft: "#f2ead9", hero: "linear-gradient(145deg,#273c38,#8b9b91)" },
+        { id: "nature-snow", name: "雪山", family: "nature", paper: "#f5f8fa", surface: "#ffffff", deep: "#e3ebf0", ink: "#29333b", muted: "#75818a", line: "#d9e4eb", accent: "#57829e", soft: "#e5f1f8", red: "#a95b60", redSoft: "#f5e5e8", gold: "#92794a", goldSoft: "#f3ecdf", hero: "linear-gradient(145deg,#3f6378,#d8e5ea)" },
+        { id: "nature-river", name: "河流", family: "nature", paper: "#eff8f5", surface: "#fbfefd", deep: "#dbece8", ink: "#283737", muted: "#6c7e7b", line: "#d2e7e2", accent: "#3e867c", soft: "#dcf1ec", red: "#a95c54", redSoft: "#f5e5e2", gold: "#92783d", goldSoft: "#f1ead8", hero: "linear-gradient(145deg,#286a68,#9bc9bd)" },
+        { id: "nature-sea", name: "大海", family: "nature", paper: "#edf6fa", surface: "#f9fdff", deep: "#d8eaf2", ink: "#26343d", muted: "#687b85", line: "#d0e4ed", accent: "#3f7899", soft: "#dceef7", red: "#a95b63", redSoft: "#f5e4e8", gold: "#927a43", goldSoft: "#f1eadc", hero: "linear-gradient(145deg,#275b7a,#8dc5d4)" },
+        { id: "nature-grassland", name: "草原", family: "nature", paper: "#f7f8e9", surface: "#fdfef8", deep: "#e9ecd5", ink: "#35372a", muted: "#7a7d68", line: "#e1e5ca", accent: "#718a43", soft: "#eef2d9", red: "#a85f48", redSoft: "#f4e6df", gold: "#9d7931", goldSoft: "#f3ecd7", hero: "linear-gradient(145deg,#496b3d,#c5d58d)" },
+        { id: "nature-cabin", name: "丛林木屋", family: "nature", paper: "#f8f2e8", surface: "#fffdf8", deep: "#eadfce", ink: "#393128", muted: "#7f7467", line: "#e4d6c1", accent: "#786444", soft: "#efe6d7", red: "#a45d4d", redSoft: "#f4e4df", gold: "#966c2f", goldSoft: "#f2e5cf", hero: "linear-gradient(145deg,#3d4e31,#8d6a46)" }
+      ]
+    }
+  ];
+  const THEME_CATALOG = new Map(
+    THEME_FAMILIES.flatMap((family) => family.themes).map((theme) => [theme.id, theme])
+  );
 
   const icons = {
     home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10M9 20v-6h6v6"/></svg>',
@@ -43,16 +139,23 @@
   let drawingUndoStack = [];
   let overlayDrawingMode = false;
   let overlayUndoStack = [];
+  let shapeSelectMode = false;
+  let selectedShapeId = "";
+  const canvasModels = new WeakMap();
+  let musicEngine = null;
+  let musicUnlockBound = false;
   let noteSaveTimer = null;
   let workspaceResizeHandler = null;
 
   function defaultState() {
     return {
-      version: 2,
+      version: 4,
       progress: {},
       wrong: {},
       notebook: {},
       notes: {},
+      shapes: {},
+      manualWrong: {},
       activeSession: null,
       daily: {},
       expandedPart: 1,
@@ -67,10 +170,17 @@
         soundPreset: "drop",
         noteMode: "type",
         drawing: {
-          practice: true,
-          wrong: true,
-          notebook: true
+          practice: { overlay: true, paper: true },
+          wrong: { overlay: true, paper: true },
+          notebook: { overlay: true, paper: true }
         },
+        assistEnabled: false,
+        highlighterOpacity: 0.28,
+        themeStyle: "paper",
+        contentFont: "sans",
+        musicEnabled: false,
+        musicTrack: "piano",
+        musicVolume: 0.14,
         workspace: {
           leftRatio: 0.58,
           topRatio: 0.62
@@ -92,14 +202,28 @@
         ...defaults.settings.drawing,
         ...(parsed?.settings?.drawing || {})
       };
+      for (const mode of ["practice", "wrong", "notebook"]) {
+        const value = settings.drawing[mode];
+        settings.drawing[mode] = typeof value === "object"
+          ? { overlay: value.overlay !== false, paper: value.paper !== false }
+          : { overlay: value !== false, paper: value !== false };
+      }
       if (parsed?.settings && parsed.settings.lineHeight === undefined) {
         settings.fontSize = 15;
         settings.lineHeight = 1.7;
       }
+      if (!THEME_CATALOG.has(settings.themeStyle)) settings.themeStyle = "paper";
+      if (!FONT_STACKS[settings.contentFont]) settings.contentFont = "sans";
+      if (!MUSIC_PRESETS[settings.musicTrack]) settings.musicTrack = "piano";
+      settings.highlighterOpacity = Math.min(
+        0.75,
+        Math.max(0.08, Number(settings.highlighterOpacity) || 0.28)
+      );
+      settings.musicVolume = Math.min(0.4, Math.max(0, Number(settings.musicVolume) || 0.14));
       return {
         ...defaults,
         ...(parsed || {}),
-        version: 2,
+        version: 4,
         settings
       };
     } catch {
@@ -124,9 +248,16 @@
       Math.max(1.1, Number(STATE.settings.lineHeight) || 1.7)
     );
     const isBold = STATE.settings.fontWeight === "bold";
+    const theme = THEME_CATALOG.get(STATE.settings.themeStyle) || THEME_CATALOG.get("paper");
+    const isDark = STATE.settings.theme === "dark";
     document.documentElement.dataset.theme = STATE.settings.theme === "dark" ? "dark" : "light";
+    document.documentElement.dataset.themeFamily = theme.family;
     document.documentElement.style.setProperty("--reading-size", `${size}px`);
     document.documentElement.style.setProperty("--reading-line-height", String(lineHeight));
+    document.documentElement.style.setProperty(
+      "--content-font",
+      FONT_STACKS[STATE.settings.contentFont] || FONT_STACKS.sans
+    );
     document.documentElement.style.setProperty(
       "--reading-title-weight",
       isBold ? "800" : "600"
@@ -144,18 +275,63 @@
     if (backgroundNode) {
       backgroundNode.style.opacity = STATE.settings.backgroundImage ? "1" : "0";
     }
+    const palette = {
+      paper: theme.paper,
+      paperDeep: theme.deep,
+      surface: theme.surface,
+      ink: theme.ink,
+      muted: theme.muted,
+      line: theme.line,
+      green: theme.accent,
+      greenSoft: theme.soft,
+      red: theme.red,
+      redSoft: theme.redSoft,
+      gold: theme.gold,
+      goldSoft: theme.goldSoft
+    };
+    if (isDark) {
+      palette.paper = "#151916";
+      palette.paperDeep = "#252b26";
+      palette.surface = "#1e241f";
+      palette.ink = "#f2eee3";
+      palette.muted = "#aaa99e";
+      palette.line = "#3b453d";
+      palette.greenSoft = "#1d392d";
+      palette.redSoft = "#3b2422";
+      palette.goldSoft = "#382f20";
+    }
+    const cssVariables = {
+      "--paper": palette.paper,
+      "--paper-deep": palette.paperDeep,
+      "--surface": palette.surface,
+      "--ink": palette.ink,
+      "--muted": palette.muted,
+      "--line": palette.line,
+      "--green": palette.green,
+      "--green-soft": palette.greenSoft,
+      "--red": palette.red,
+      "--red-soft": palette.redSoft,
+      "--gold": palette.gold,
+      "--gold-soft": palette.goldSoft,
+      "--hero-bg": isDark ? "#0f1410" : theme.hero || theme.ink
+    };
+    for (const [name, value] of Object.entries(cssVariables)) {
+      document.documentElement.style.setProperty(name, value);
+    }
     const themeMeta = document.querySelector?.('meta[name="theme-color"]');
     if (themeMeta) {
       themeMeta.setAttribute(
         "content",
-        STATE.settings.theme === "dark" ? "#151916" : "#f4f1e8"
+        isDark ? "#151916" : theme.paper
       );
     }
   }
 
-  function drawingEnabledForMode(mode) {
-    const key = mode === "wrong" ? "wrong" : mode === "notebook" ? "notebook" : "practice";
-    return STATE.settings.drawing?.[key] !== false;
+  function drawingEnabledForMode(mode, channel) {
+    const key = ["wrong", "notebook"].includes(mode) ? mode : "practice";
+    const value = STATE.settings.drawing?.[key];
+    if (typeof value === "boolean") return value;
+    return value?.[channel] !== false;
   }
 
   function conciseExplanation(question) {
@@ -223,6 +399,157 @@
     }
   }
 
+  function stopBackgroundMusic() {
+    if (!musicEngine) return;
+    clearInterval(musicEngine.timer);
+    for (const source of musicEngine.sources) {
+      try {
+        source.stop();
+      } catch {}
+      try {
+        source.disconnect();
+      } catch {}
+    }
+    try {
+      musicEngine.master.disconnect();
+    } catch {}
+    musicEngine = null;
+  }
+
+  function makeNoiseBuffer(context, seconds = 3) {
+    const buffer = context.createBuffer(1, context.sampleRate * seconds, context.sampleRate);
+    const channel = buffer.getChannelData(0);
+    let previous = 0;
+    for (let index = 0; index < channel.length; index += 1) {
+      const white = Math.random() * 2 - 1;
+      previous = previous * 0.97 + white * 0.03;
+      channel[index] = previous * 2.8;
+    }
+    return buffer;
+  }
+
+  function startBackgroundMusic() {
+    if (!STATE.settings.musicEnabled) {
+      stopBackgroundMusic();
+      return;
+    }
+    const context = ensureAudioContext();
+    if (!context) return;
+    stopBackgroundMusic();
+    const master = context.createGain();
+    master.gain.setValueAtTime(
+      Math.min(0.4, Math.max(0, Number(STATE.settings.musicVolume) || 0.14)),
+      context.currentTime
+    );
+    master.connect(context.destination);
+    musicEngine = { master, sources: [], timer: null };
+    const track = STATE.settings.musicTrack;
+
+    if (track === "piano") {
+      const chords = [
+        [261.63, 329.63, 392.0],
+        [220.0, 261.63, 329.63],
+        [174.61, 220.0, 261.63],
+        [196.0, 246.94, 293.66]
+      ];
+      let chordIndex = 0;
+      const playChord = () => {
+        if (!musicEngine) return;
+        const now = context.currentTime + 0.03;
+        const chord = chords[chordIndex % chords.length];
+        chordIndex += 1;
+        chord.forEach((frequency, noteIndex) => {
+          const oscillator = context.createOscillator();
+          const gain = context.createGain();
+          oscillator.type = "sine";
+          oscillator.frequency.setValueAtTime(frequency, now + noteIndex * 0.16);
+          gain.gain.setValueAtTime(0.0001, now + noteIndex * 0.16);
+          gain.gain.exponentialRampToValueAtTime(0.085, now + noteIndex * 0.16 + 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + noteIndex * 0.16 + 2.8);
+          oscillator.connect(gain);
+          gain.connect(master);
+          oscillator.start(now + noteIndex * 0.16);
+          oscillator.stop(now + noteIndex * 0.16 + 2.9);
+          musicEngine?.sources.push(oscillator);
+          oscillator.onended = () => {
+            if (musicEngine) {
+              musicEngine.sources = musicEngine.sources.filter((source) => source !== oscillator);
+            }
+          };
+        });
+      };
+      playChord();
+      musicEngine.timer = setInterval(playChord, 3200);
+      return;
+    }
+
+    const noise = context.createBufferSource();
+    noise.buffer = makeNoiseBuffer(context, 4);
+    noise.loop = true;
+    const filter = context.createBiquadFilter();
+    const ambienceGain = context.createGain();
+    noise.connect(filter);
+    filter.connect(ambienceGain);
+    ambienceGain.connect(master);
+    if (track === "rain") {
+      filter.type = "highpass";
+      filter.frequency.value = 950;
+      ambienceGain.gain.value = 0.72;
+    } else if (track === "stream") {
+      filter.type = "bandpass";
+      filter.frequency.value = 1180;
+      filter.Q.value = 0.38;
+      ambienceGain.gain.value = 0.82;
+    } else {
+      filter.type = "lowpass";
+      filter.frequency.value = 1450;
+      ambienceGain.gain.value = 0.68;
+    }
+    noise.start();
+    musicEngine.sources.push(noise);
+
+    if (track === "forest") {
+      let chirpIndex = 0;
+      musicEngine.timer = setInterval(() => {
+        if (!musicEngine) return;
+        const now = context.currentTime;
+        const oscillator = context.createOscillator();
+        const gain = context.createGain();
+        const base = chirpIndex % 2 ? 1450 : 1780;
+        chirpIndex += 1;
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(base, now);
+        oscillator.frequency.exponentialRampToValueAtTime(base * 1.22, now + 0.16);
+        oscillator.frequency.exponentialRampToValueAtTime(base * 0.92, now + 0.34);
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(0.055, now + 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.38);
+        oscillator.connect(gain);
+        gain.connect(master);
+        oscillator.start(now);
+        oscillator.stop(now + 0.4);
+        musicEngine?.sources.push(oscillator);
+        oscillator.onended = () => {
+          if (musicEngine) {
+            musicEngine.sources = musicEngine.sources.filter((source) => source !== oscillator);
+          }
+        };
+      }, 5800);
+    }
+  }
+
+  function bindMusicUnlock() {
+    if (musicUnlockBound) return;
+    musicUnlockBound = true;
+    document.addEventListener(
+      "pointerdown",
+      () => {
+        if (STATE.settings.musicEnabled && !musicEngine) startBackgroundMusic();
+      },
+      { once: true, passive: true }
+    );
+  }
+
   function escapeHtml(value) {
     return String(value ?? "")
       .replaceAll("&", "&amp;")
@@ -276,6 +603,7 @@
       applyPreferences();
       render();
       registerServiceWorker();
+      bindMusicUnlock();
     } catch (error) {
       app.innerHTML = `
         <div class="empty-state">
@@ -287,7 +615,11 @@
   }
 
   function registerServiceWorker() {
-    if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+    if (
+      !window.__XIAO1000_SINGLE__ &&
+      "serviceWorker" in navigator &&
+      location.protocol.startsWith("http")
+    ) {
       navigator.serviceWorker.register("./service-worker.js").catch(() => {});
     }
   }
@@ -393,6 +725,32 @@
     saveState();
   }
 
+  function toggleManualWrong(question) {
+    const existing = STATE.wrong[question.id];
+    if (existing) {
+      if ((existing.wrongCount || 0) > 0) {
+        showToast("这道题已有真实错误记录，不能从这里删除");
+        return;
+      }
+      delete STATE.wrong[question.id];
+      saveState();
+      render();
+      showToast("已移出手动错题本");
+      return;
+    }
+    STATE.wrong[question.id] = {
+      wrongCount: 0,
+      correctStreak: 0,
+      mastered: false,
+      manual: true,
+      firstWrongAt: Date.now(),
+      lastWrongAt: 0
+    };
+    saveState();
+    render();
+    showToast("已加入错题本");
+  }
+
   const drawingCache = new Map();
   let drawingDbPromise = null;
 
@@ -490,42 +848,295 @@
     });
   }
 
+  function drawingStorageKey(question, target) {
+    return target === "overlay" ? `overlay:${question.id}` : question.id;
+  }
+
   function saveCanvasSnapshot(question, canvas, target = "paper") {
-    const storageKey = target === "overlay" ? `overlay:${question.id}` : question.id;
+    const model = canvasModels.get(canvas);
+    if (!model) return;
+    const storageKey = drawingStorageKey(question, target);
+    const hasContent = model.items.length > 0 || Boolean(model.legacyImage);
     const existing = STATE.notebook[question.id] || {};
     STATE.notebook[question.id] = {
       chapterId: question.chapterId,
       addedAt: existing.addedAt || Date.now(),
       updatedAt: Date.now(),
-      hasDrawing: true,
-      hasPaperDrawing: target === "paper" ? true : Boolean(existing.hasPaperDrawing),
-      hasOverlayDrawing: target === "overlay" ? true : Boolean(existing.hasOverlayDrawing)
+      hasDrawing: hasContent,
+      hasPaperDrawing:
+        target === "paper" ? hasContent : Boolean(existing.hasPaperDrawing),
+      hasOverlayDrawing:
+        target === "overlay" ? hasContent : Boolean(existing.hasOverlayDrawing)
     };
     saveState();
-    saveDrawingData(storageKey, canvas.toDataURL("image/png")).catch(() => {
+    const payload = JSON.stringify({
+      version: 1,
+      items: model.items
+    });
+    saveDrawingData(`vector:${storageKey}`, payload).catch(() => {
       showToast("手写内容保存失败，请重试");
     });
   }
 
-  function configureBrush(context, pressure = 1) {
-    const brush = drawingEraser ? "eraser" : drawingBrush;
-    context.globalCompositeOperation =
-      brush === "eraser" ? "destination-out" : "source-over";
-    context.strokeStyle = drawingColor;
-    context.fillStyle = drawingColor;
+  function brushMultiplier(brush) {
+    return brush === "highlighter" ? 2.4 : brush === "marker" ? 1.45 : brush === "pencil" ? 0.8 : 1;
+  }
+
+  function drawVectorItem(context, item, width, height) {
+    const brush = item.brush || "pen";
+    context.globalCompositeOperation = item.eraser ? "destination-out" : "source-over";
+    context.strokeStyle = item.color || "#20231f";
+    context.fillStyle = item.color || "#20231f";
     context.lineCap = brush === "highlighter" ? "square" : "round";
     context.lineJoin = "round";
-    context.globalAlpha =
-      brush === "pencil"
-        ? 0.55
-        : brush === "marker"
-          ? 0.82
-          : brush === "highlighter"
-            ? 0.24
-            : 1;
-    const multiplier =
-      brush === "highlighter" ? 2.35 : brush === "marker" ? 1.45 : brush === "pencil" ? 0.8 : 1;
-    context.lineWidth = drawingWidth * multiplier * pressure;
+    context.globalAlpha = brush === "pencil" ? 0.55 : brush === "marker" ? 0.82 : 1;
+    context.lineWidth = Math.max(1, Number(item.width) || 3) * brushMultiplier(brush);
+
+    if (item.type === "stroke") {
+      if (!item.points?.length) return;
+      context.beginPath();
+      const first = item.points[0];
+      context.moveTo(first.x * width, first.y * height);
+      for (let index = 1; index < item.points.length; index += 1) {
+        const point = item.points[index];
+        context.lineTo(point.x * width, point.y * height);
+      }
+      if (item.points.length === 1) {
+        context.lineTo(first.x * width + 0.1, first.y * height + 0.1);
+      }
+      context.stroke();
+      return;
+    }
+
+    const x1 = item.x1 * width;
+    const y1 = item.y1 * height;
+    const x2 = item.x2 * width;
+    const y2 = item.y2 * height;
+    context.beginPath();
+    if (item.type === "line") {
+      context.moveTo(x1, y1);
+      context.lineTo(x2, y2);
+    } else if (item.type === "ellipse") {
+      context.ellipse(
+        (x1 + x2) / 2,
+        (y1 + y2) / 2,
+        Math.max(0.5, Math.abs(x2 - x1) / 2),
+        Math.max(0.5, Math.abs(y2 - y1) / 2),
+        0,
+        0,
+        Math.PI * 2
+      );
+    } else if (item.type === "rect") {
+      context.rect(
+        Math.min(x1, x2),
+        Math.min(y1, y2),
+        Math.abs(x2 - x1),
+        Math.abs(y2 - y1)
+      );
+    }
+    context.stroke();
+  }
+
+  function drawSelection(context, shape, width, height) {
+    if (!shape) return;
+    const x1 = shape.x1 * width;
+    const y1 = shape.y1 * height;
+    const x2 = shape.x2 * width;
+    const y2 = shape.y2 * height;
+    const padding = 7;
+    context.save();
+    context.globalAlpha = 1;
+    context.globalCompositeOperation = "source-over";
+    context.strokeStyle = "#0f7bdb";
+    context.lineWidth = 1.5;
+    context.setLineDash([5, 4]);
+    context.strokeRect(
+      Math.min(x1, x2) - padding,
+      Math.min(y1, y2) - padding,
+      Math.abs(x2 - x1) + padding * 2,
+      Math.abs(y2 - y1) + padding * 2
+    );
+    context.setLineDash([]);
+    context.fillStyle = "#ffffff";
+    context.strokeStyle = "#0f7bdb";
+    context.lineWidth = 2;
+    context.beginPath();
+    context.arc(x2, y2, 7, 0, Math.PI * 2);
+    context.fill();
+    context.stroke();
+    context.restore();
+  }
+
+  function renderDrawingCanvas(canvas, model, activeItem = null) {
+    if (!canvas || !model) return;
+    const context = canvas.getContext("2d");
+    const ratio = model.ratio || 1;
+    const width = canvas.width / ratio;
+    const height = canvas.height / ratio;
+    context.save();
+    context.setTransform(1, 0, 0, 1, 0, 0);
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    if (model.legacyImage) {
+      context.drawImage(model.legacyImage, 0, 0, canvas.width, canvas.height);
+    }
+    context.restore();
+    context.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+    const items = activeItem ? [...model.items, activeItem] : model.items;
+    for (const item of items) {
+      if (item.type !== "stroke" || item.brush !== "highlighter") {
+        drawVectorItem(context, item, width, height);
+      }
+    }
+
+    const highlighterLayer = document.createElement("canvas");
+    highlighterLayer.width = canvas.width;
+    highlighterLayer.height = canvas.height;
+    const highlighterContext = highlighterLayer.getContext("2d");
+    highlighterContext.setTransform(ratio, 0, 0, ratio, 0, 0);
+    let hasHighlighter = false;
+    for (const item of items) {
+      if ((item.type === "stroke" && item.brush === "highlighter") || item.eraser) {
+        drawVectorItem(highlighterContext, item, width, height);
+        if (item.type === "stroke" && item.brush === "highlighter") hasHighlighter = true;
+      }
+    }
+    if (hasHighlighter) {
+      context.save();
+      context.setTransform(1, 0, 0, 1, 0, 0);
+      context.globalCompositeOperation = "source-over";
+      context.globalAlpha = Math.min(
+        0.75,
+        Math.max(0.08, Number(STATE.settings.highlighterOpacity) || 0.28)
+      );
+      context.drawImage(highlighterLayer, 0, 0);
+      context.restore();
+    }
+
+    const selected = model.items.find(
+      (item) => item.id === selectedShapeId && ["line", "ellipse", "rect"].includes(item.type)
+    );
+    if (selected && shapeSelectMode) drawSelection(context, selected, width, height);
+  }
+
+  function distanceToSegment(point, start, end) {
+    const dx = end.x - start.x;
+    const dy = end.y - start.y;
+    if (!dx && !dy) return Math.hypot(point.x - start.x, point.y - start.y);
+    const ratio = Math.max(
+      0,
+      Math.min(1, ((point.x - start.x) * dx + (point.y - start.y) * dy) / (dx * dx + dy * dy))
+    );
+    return Math.hypot(point.x - (start.x + ratio * dx), point.y - (start.y + ratio * dy));
+  }
+
+  function recognizeStroke(points, width, height) {
+    if (!STATE.settings.assistEnabled || points.length < 5) return null;
+    const start = points[0];
+    const end = points[points.length - 1];
+    const minX = Math.min(...points.map((point) => point.x));
+    const maxX = Math.max(...points.map((point) => point.x));
+    const minY = Math.min(...points.map((point) => point.y));
+    const maxY = Math.max(...points.map((point) => point.y));
+    const boxWidth = maxX - minX;
+    const boxHeight = maxY - minY;
+    if (boxWidth < 18 && boxHeight < 18) return null;
+    const diagonal = Math.hypot(boxWidth, boxHeight);
+    const closingDistance = Math.hypot(end.x - start.x, end.y - start.y);
+    const closed = closingDistance <= Math.max(15, diagonal * 0.24);
+    const chord = Math.hypot(end.x - start.x, end.y - start.y);
+    const makeShape = (type) => ({
+      id: `shape-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      type,
+      x1: minX / width,
+      y1: minY / height,
+      x2: maxX / width,
+      y2: maxY / height,
+      color: drawingColor,
+      width: drawingWidth,
+      brush: drawingBrush
+    });
+
+    if (!closed && chord >= 32) {
+      let maxDeviation = 0;
+      for (const point of points) {
+        maxDeviation = Math.max(maxDeviation, distanceToSegment(point, start, end));
+      }
+      if (maxDeviation <= Math.max(7, chord * 0.085)) {
+        const shape = {
+          ...makeShape("line"),
+          x1: start.x / width,
+          y1: start.y / height,
+          x2: end.x / width,
+          y2: end.y / height
+        };
+        return shape;
+      }
+    }
+
+    if (closed && boxWidth >= 24 && boxHeight >= 24) {
+      const minDimension = Math.max(1, Math.min(boxWidth, boxHeight));
+      let edgeHits = 0;
+      for (const point of points) {
+        const edgeDistance = Math.min(
+          Math.abs(point.x - minX),
+          Math.abs(point.x - maxX),
+          Math.abs(point.y - minY),
+          Math.abs(point.y - maxY)
+        );
+        if (edgeDistance <= Math.max(6, minDimension * 0.12)) edgeHits += 1;
+      }
+      let axisAlignedSegments = 0;
+      for (let index = 1; index < points.length; index += 1) {
+        const dx = Math.abs(points[index].x - points[index - 1].x);
+        const dy = Math.abs(points[index].y - points[index - 1].y);
+        if (dx < 0.5 && dy < 0.5) continue;
+        const angle = Math.atan2(dy, dx);
+        const axisDistance = Math.min(angle, Math.abs(Math.PI / 2 - angle));
+        if (axisDistance <= 0.34) axisAlignedSegments += 1;
+      }
+      const axisAlignedRatio = axisAlignedSegments / Math.max(1, points.length - 1);
+      if (edgeHits / points.length >= 0.68 && axisAlignedRatio >= 0.68) {
+        return makeShape("rect");
+      }
+
+      const centerX = (minX + maxX) / 2;
+      const centerY = (minY + maxY) / 2;
+      const radiusX = Math.max(1, boxWidth / 2);
+      const radiusY = Math.max(1, boxHeight / 2);
+      let radialError = 0;
+      for (const point of points) {
+        const normalizedRadius = Math.hypot(
+          (point.x - centerX) / radiusX,
+          (point.y - centerY) / radiusY
+        );
+        radialError += Math.abs(1 - normalizedRadius);
+      }
+      if (radialError / points.length <= 0.19) return makeShape("ellipse");
+    }
+    return null;
+  }
+
+  function shapeFromPoint(model, point, width, height) {
+    const shapes = model.items
+      .filter((item) => ["line", "ellipse", "rect"].includes(item.type))
+      .reverse();
+    return shapes.find((shape) => {
+      const x1 = shape.x1 * width;
+      const y1 = shape.y1 * height;
+      const x2 = shape.x2 * width;
+      const y2 = shape.y2 * height;
+      const margin = Math.max(12, Number(shape.width) || 3);
+      if (shape.type === "line") {
+        return distanceToSegment(point, { x: x1, y: y1 }, { x: x2, y: y2 }) <= margin;
+      }
+      return (
+        point.x >= Math.min(x1, x2) - margin &&
+        point.x <= Math.max(x1, x2) + margin &&
+        point.y >= Math.min(y1, y2) - margin &&
+        point.y <= Math.max(y1, y2) + margin
+      );
+    });
   }
 
   function setupDrawingCanvas(question, target = "paper") {
@@ -542,89 +1153,166 @@
     context.lineCap = "round";
     context.lineJoin = "round";
 
-    const currentQuestionId = question.id;
-    const storageKey = target === "overlay" ? `overlay:${currentQuestionId}` : currentQuestionId;
+    const storageKey = drawingStorageKey(question, target);
+    const vectorKey = `vector:${storageKey}`;
     const isActive = target === "overlay" ? overlayDrawingMode : drawingMode;
-    drawingQuestionId = currentQuestionId;
-    getDrawingData(storageKey).then((dataUrl) => {
-      if (!dataUrl || !canvas.isConnected) return;
-      const image = new Image();
-      image.onload = () => {
-        if (!canvas.isConnected) return;
-        context.save();
-        context.setTransform(1, 0, 0, 1, 0, 0);
-        context.drawImage(image, 0, 0, canvas.width, canvas.height);
-        context.restore();
-      };
-      image.src = dataUrl;
-    });
+    drawingQuestionId = question.id;
+    const model = {
+      question,
+      target,
+      storageKey,
+      ratio,
+      legacyImage: null,
+      items: []
+    };
+    canvasModels.set(canvas, model);
+
+    Promise.all([getDrawingData(storageKey), getDrawingData(vectorKey)]).then(
+      ([legacyData, vectorData]) => {
+        if (!canvas.isConnected || canvasModels.get(canvas) !== model) return;
+        try {
+          const parsed = vectorData ? JSON.parse(vectorData) : null;
+          model.items = Array.isArray(parsed?.items) ? parsed.items : [];
+        } catch {
+          model.items = [];
+        }
+        if (!legacyData) {
+          renderDrawingCanvas(canvas, model);
+          return;
+        }
+        const image = new Image();
+        image.onload = () => {
+          if (!canvas.isConnected || canvasModels.get(canvas) !== model) return;
+          model.legacyImage = image;
+          renderDrawingCanvas(canvas, model);
+        };
+        image.src = legacyData;
+      }
+    );
 
     if (!isActive || canvas.dataset.bound === "true") return;
     canvas.dataset.bound = "true";
-    if (target === "overlay") {
-      overlayUndoStack.length = 0;
-    } else {
-      drawingUndoStack.length = 0;
-    }
-    const undoStack = target === "overlay" ? overlayUndoStack : drawingUndoStack;
     let activePointer = null;
-    let lastPoint = null;
+    let activeItem = null;
+    let dragState = null;
 
     const pointFromEvent = (event) => {
       const bounds = canvas.getBoundingClientRect();
       return {
-        x: event.clientX - bounds.left,
-        y: event.clientY - bounds.top,
+        x: Math.max(0, Math.min(bounds.width, event.clientX - bounds.left)),
+        y: Math.max(0, Math.min(bounds.height, event.clientY - bounds.top)),
         pressure: event.pointerType === "pen" ? Math.max(0.25, event.pressure || 0.5) : 1
       };
     };
 
-    const save = () => {
-      saveCanvasSnapshot(question, canvas, target);
-    };
-
-    canvas.addEventListener("pointerdown", (event) => {
-      event.preventDefault();
-      activePointer = event.pointerId;
-      canvas.setPointerCapture(event.pointerId);
-      lastPoint = pointFromEvent(event);
-      try {
-        undoStack.push(context.getImageData(0, 0, canvas.width, canvas.height));
-        if (undoStack.length > 12) undoStack.shift();
-      } catch {}
-      configureBrush(context, lastPoint.pressure);
-      context.beginPath();
-      context.arc(lastPoint.x, lastPoint.y, context.lineWidth / 2, 0, Math.PI * 2);
-      context.fill();
-    });
-
-    canvas.addEventListener("pointermove", (event) => {
-      if (activePointer !== event.pointerId || !lastPoint) return;
-      event.preventDefault();
-      const nextPoint = pointFromEvent(event);
-      configureBrush(context, (lastPoint.pressure + nextPoint.pressure) / 2);
-      context.beginPath();
-      context.moveTo(lastPoint.x, lastPoint.y);
-      const jitter = drawingBrush === "pencil" && !drawingEraser ? 0.45 : 0;
-      context.lineTo(
-        nextPoint.x + (Math.random() - 0.5) * jitter,
-        nextPoint.y + (Math.random() - 0.5) * jitter
-      );
-      context.stroke();
-      lastPoint = nextPoint;
-    });
-
-    const endStroke = (event) => {
+    const save = () => saveCanvasSnapshot(question, canvas, target);
+    const redraw = () => renderDrawingCanvas(canvas, model, activeItem);
+    const finishPointer = (event) => {
       if (activePointer !== event.pointerId) return;
-      activePointer = null;
-      lastPoint = null;
       try {
         canvas.releasePointerCapture(event.pointerId);
       } catch {}
+      activePointer = null;
+      if (dragState) {
+        dragState = null;
+        save();
+        return;
+      }
+      if (!activeItem) return;
+      const finished = activeItem;
+      activeItem = null;
+      const recognized =
+        !finished.eraser
+          ? recognizeStroke(finished.rawPoints || [], rect.width, rect.height)
+          : null;
+      if (recognized) {
+        model.items.push(recognized);
+        selectedShapeId = recognized.id;
+      } else {
+        delete finished.rawPoints;
+        finished.points = finished.rawPointsNormalized || finished.points;
+        delete finished.rawPointsNormalized;
+        model.items.push(finished);
+      }
+      renderDrawingCanvas(canvas, model);
       save();
     };
-    canvas.addEventListener("pointerup", endStroke);
-    canvas.addEventListener("pointercancel", endStroke);
+
+    canvas.addEventListener("pointerdown", (event) => {
+      if (event.button !== undefined && event.button !== 0) return;
+      event.preventDefault();
+      activePointer = event.pointerId;
+      canvas.setPointerCapture(event.pointerId);
+      const point = pointFromEvent(event);
+
+      if (shapeSelectMode && STATE.settings.assistEnabled) {
+        const shape = shapeFromPoint(model, point, rect.width, rect.height);
+        if (!shape) {
+          selectedShapeId = "";
+          renderDrawingCanvas(canvas, model);
+          return;
+        }
+        selectedShapeId = shape.id;
+        const resizeDistance = Math.hypot(
+          point.x - shape.x2 * rect.width,
+          point.y - shape.y2 * rect.height
+        );
+        dragState = {
+          shape,
+          mode: resizeDistance <= 22 ? "resize" : "move",
+          start: point,
+          original: { x1: shape.x1, y1: shape.y1, x2: shape.x2, y2: shape.y2 }
+        };
+        renderDrawingCanvas(canvas, model);
+        return;
+      }
+
+      const brush = drawingEraser ? "eraser" : drawingBrush;
+      const normalizedPoints = [{ x: point.x / rect.width, y: point.y / rect.height }];
+      activeItem = {
+        id: `stroke-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        type: "stroke",
+        brush,
+        color: drawingColor,
+        width: drawingWidth,
+        eraser: drawingEraser,
+        rawPoints: [point],
+        rawPointsNormalized: normalizedPoints,
+        points: normalizedPoints
+      };
+      redraw();
+    });
+
+    canvas.addEventListener("pointermove", (event) => {
+      if (activePointer !== event.pointerId) return;
+      event.preventDefault();
+      const point = pointFromEvent(event);
+      if (dragState) {
+        const dx = (point.x - dragState.start.x) / rect.width;
+        const dy = (point.y - dragState.start.y) / rect.height;
+        const original = dragState.original;
+        if (dragState.mode === "move") {
+          dragState.shape.x1 = Math.max(0, Math.min(1, original.x1 + dx));
+          dragState.shape.y1 = Math.max(0, Math.min(1, original.y1 + dy));
+          dragState.shape.x2 = Math.max(0, Math.min(1, original.x2 + dx));
+          dragState.shape.y2 = Math.max(0, Math.min(1, original.y2 + dy));
+        } else {
+          dragState.shape.x2 = Math.max(0, Math.min(1, point.x / rect.width));
+          dragState.shape.y2 = Math.max(0, Math.min(1, point.y / rect.height));
+        }
+        redraw();
+        return;
+      }
+      if (!activeItem) return;
+      activeItem.rawPoints.push(point);
+      activeItem.rawPointsNormalized.push({
+        x: point.x / rect.width,
+        y: point.y / rect.height
+      });
+      redraw();
+    });
+    canvas.addEventListener("pointerup", finishPointer);
+    canvas.addEventListener("pointercancel", finishPointer);
   }
 
   function setupWorkspaceSplitters() {
@@ -799,7 +1487,7 @@
     const wrapperClass = overlay ? "overlay-tools" : "drawing-toolbar";
     const undoAction = overlay ? "undo-overlay" : "undo-drawing";
     const clearAction = overlay ? "clear-overlay" : "clear-drawing";
-    return `<div class="${wrapperClass}">
+    return `<div class="${wrapperClass}" data-ink-target="${overlay ? "overlay" : "paper"}">
       <button class="drawing-tool ${!drawingEraser && drawingBrush === "pen" ? "active" : ""}" data-action="draw-brush" data-brush="pen">钢笔</button>
       <button class="drawing-tool ${!drawingEraser && drawingBrush === "pencil" ? "active" : ""}" data-action="draw-brush" data-brush="pencil">铅笔</button>
       <button class="drawing-tool ${!drawingEraser && drawingBrush === "marker" ? "active" : ""}" data-action="draw-brush" data-brush="marker">马克笔</button>
@@ -809,10 +1497,18 @@
       <button class="pen-color ${drawingColor === "#334c82" ? "active" : ""}" style="background:#334c82" data-action="draw-color" data-color="#334c82" aria-label="蓝色画笔"></button>
       <button class="pen-color ${drawingColor === "#20231f" ? "active" : ""}" style="background:#20231f" data-action="draw-color" data-color="#20231f" aria-label="黑色画笔"></button>
       <button class="pen-color ${drawingColor === "#d49a1f" ? "active" : ""}" style="background:#d49a1f" data-action="draw-color" data-color="#d49a1f" aria-label="黄色荧光"></button>
+      <button class="pen-color ${drawingColor === "#F4B6C2" ? "active" : ""}" style="background:#F4B6C2" data-action="draw-color" data-color="#F4B6C2" aria-label="奶油粉"></button>
+      <button class="pen-color ${drawingColor === "#A8D5BA" ? "active" : ""}" style="background:#A8D5BA" data-action="draw-color" data-color="#A8D5BA" aria-label="薄荷绿"></button>
+      <button class="pen-color ${drawingColor === "#C9B8E8" ? "active" : ""}" style="background:#C9B8E8" data-action="draw-color" data-color="#C9B8E8" aria-label="薰衣草紫"></button>
+      <button class="pen-color ${drawingColor === "#F7D994" ? "active" : ""}" style="background:#F7D994" data-action="draw-color" data-color="#F7D994" aria-label="奶油黄"></button>
+      <button class="pen-color ${drawingColor === "#A9D6E5" ? "active" : ""}" style="background:#A9D6E5" data-action="draw-color" data-color="#A9D6E5" aria-label="天空蓝"></button>
+      <button class="pen-color ${drawingColor === "#F2B28C" ? "active" : ""}" style="background:#F2B28C" data-action="draw-color" data-color="#F2B28C" aria-label="蜜桃橙"></button>
       <button class="drawing-tool ${drawingWidth === 2 ? "active" : ""}" data-action="draw-width" data-width="2">细</button>
       <button class="drawing-tool ${drawingWidth === 4 ? "active" : ""}" data-action="draw-width" data-width="4">中</button>
       <button class="drawing-tool ${drawingWidth === 7 ? "active" : ""}" data-action="draw-width" data-width="7">粗</button>
       <button class="drawing-tool ${drawingEraser ? "active" : ""}" data-action="toggle-eraser">橡皮</button>
+      ${STATE.settings.assistEnabled ? `<button class="drawing-tool ${shapeSelectMode ? "active" : ""}" data-action="toggle-shape-select">${shapeSelectMode ? "退出图形" : "选择图形"}</button>` : ""}
+      ${STATE.settings.assistEnabled && shapeSelectMode && selectedShapeId ? '<button class="drawing-tool" data-action="delete-shape">删除图形</button>' : ""}
       <button class="drawing-tool" data-action="${undoAction}">撤销</button>
       <button class="drawing-tool" data-action="${clearAction}">清空</button>
     </div>`;
@@ -931,7 +1627,11 @@
     return Object.entries(STATE.wrong)
       .map(([id, value]) => ({ id, ...value, question: QUESTION_MAP.get(id) }))
       .filter((entry) => entry.question)
-      .sort((a, b) => (b.wrongCount - a.wrongCount) || (b.lastWrongAt - a.lastWrongAt));
+      .sort(
+        (a, b) =>
+          (b.wrongCount - a.wrongCount) ||
+          ((b.lastWrongAt || b.firstWrongAt || 0) - (a.lastWrongAt || a.firstWrongAt || 0))
+      );
   }
 
   function renderWrong() {
@@ -947,7 +1647,7 @@
           const q = entry.question;
           return `<button class="wrong-item" data-action="review-wrong" data-id="${q.id}">
             <span class="wrong-count">${entry.wrongCount}<small>次</small></span>
-            <span class="wrong-copy"><strong>${escapeHtml(q.stem)}</strong><small>${escapeHtml(q.chapter)} · 第 ${q.number} 题 · 答案 ${q.answerLetters.join("")}</small></span>
+            <span class="wrong-copy"><strong>${escapeHtml(q.stem)}</strong><small>${escapeHtml(q.chapter)} · 第 ${q.number} 题 · 答案 ${q.answerLetters.join("")}${entry.manual ? " · 手动加入" : ""}</small></span>
             <span>${icons.chevron}</span>
           </button>`;
         }).join("")}</div>`
@@ -1001,7 +1701,8 @@
     const canShowAnswer = question.answerLetters.length > 0;
     const inNotebook = isInNotebook(question.id);
     const hasDrawing = Boolean(STATE.notebook[question.id]?.hasDrawing);
-    const drawingAllowed = drawingEnabledForMode("practice");
+    const overlayAllowed = drawingEnabledForMode(session.mode, "overlay");
+    const paperAllowed = drawingEnabledForMode(session.mode, "paper");
     if (session.mode === "wrong" || session.mode === "notebook") {
       return renderWrongStudyPage({
         session,
@@ -1034,9 +1735,10 @@
             <span class="badge neutral">${escapeHtml(question.chapter)}</span>
             ${STATE.wrong[question.id] ? `<span class="badge gold">错 ${STATE.wrong[question.id].wrongCount} 次</span>` : ""}
             <button class="notebook-chip ${inNotebook ? "active" : ""}" data-action="toggle-notebook" data-id="${question.id}">${inNotebook ? "已加入笔记本" : "加入笔记本"}</button>
-            ${drawingAllowed ? `<button class="drawing-toggle ${overlayDrawingMode ? "active" : ""}" data-action="toggle-overlay-ink">${overlayDrawingMode ? "关闭题干涂鸦" : "开启题干涂鸦"}</button>` : ""}
+            <button class="notebook-chip ${STATE.wrong[question.id] ? "active" : ""}" data-action="toggle-wrongbook" data-id="${question.id}">${STATE.wrong[question.id] ? "已加入错题本" : "加入错题本"}</button>
+            ${overlayAllowed ? `<button class="drawing-toggle ${overlayDrawingMode ? "active" : ""}" data-action="toggle-overlay-ink">${overlayDrawingMode ? "关闭全局涂鸦" : "开启全局涂鸦"}</button>` : ""}
           </div>
-          ${drawingAllowed && overlayDrawingMode ? inkToolsMarkup(true) : ""}
+          ${overlayAllowed && overlayDrawingMode ? inkToolsMarkup(true) : ""}
           <div class="question-drawing-surface" id="question-drawing-surface">
             <h2 class="question-title">${question.number}. ${escapeHtml(question.stem)}</h2>
             <div class="options">
@@ -1050,19 +1752,6 @@
                 </button>`;
               }).join("")}
             </div>
-            ${drawingAllowed ? `<canvas id="question-drawing-canvas" class="question-drawing-canvas ${overlayDrawingMode ? "active" : ""}" data-question-id="${question.id}"></canvas>` : ""}
-          </div>
-          ${drawingAllowed ? `<section class="drawing-section">
-            <div class="drawing-head">
-              <strong>手写批注${hasDrawing ? " · 已有笔记" : ""}</strong>
-              <button class="drawing-toggle ${drawingMode ? "active" : ""}" data-action="toggle-drawing">${drawingMode ? "收起画笔" : hasDrawing ? "继续涂画" : "开始涂画"}</button>
-            </div>
-            ${drawingMode ? inkToolsMarkup(false) : ""}
-            ${drawingMode || hasDrawing ? `<div class="canvas-shell">
-              <canvas id="drawing-canvas" class="drawing-canvas ${drawingMode ? "" : "locked"}" data-question-id="${question.id}"></canvas>
-            </div>` : ""}
-            <p class="drawing-hint">${drawingMode ? "可用手指或 Apple Pencil 书写；起笔后自动存入笔记本。" : hasDrawing ? "笔记已保存，点击“继续涂画”修改。" : "需要批注时再展开画布，不遮挡正常答题。"}</p>
-          </section>` : ""}
           ${answered ? `
             <section class="feedback ${response.correct ? "" : "wrong"}">
               <div class="feedback-title">
@@ -1078,6 +1767,19 @@
               ${question.reference ? `<p class="muted">${escapeHtml(question.reference)}</p>` : ""}
             </section>
           ` : isMulti ? '<p class="muted" style="margin:14px 2px 0">可多选，选完后提交答案。</p>' : '<p class="muted" style="margin:14px 2px 0">点击选项后立即判题。</p>'}
+            ${overlayAllowed ? `<canvas id="question-drawing-canvas" class="question-drawing-canvas ${overlayDrawingMode ? "active" : ""}" data-question-id="${question.id}"></canvas>` : ""}
+          </div>
+          ${paperAllowed ? `<section class="drawing-section">
+            <div class="drawing-head">
+              <strong>手写批注${hasDrawing ? " · 已有笔记" : ""}</strong>
+              <button class="drawing-toggle ${drawingMode ? "active" : ""}" data-action="toggle-drawing">${drawingMode ? "收起画笔" : hasDrawing ? "继续涂画" : "开始涂画"}</button>
+            </div>
+            ${drawingMode ? inkToolsMarkup(false) : ""}
+            ${drawingMode || hasDrawing ? `<div class="canvas-shell">
+              <canvas id="drawing-canvas" class="drawing-canvas ${drawingMode ? "" : "locked"}" data-question-id="${question.id}"></canvas>
+            </div>` : ""}
+            <p class="drawing-hint">${drawingMode ? "可用手指或 Apple Pencil 书写；起笔后自动存入笔记本。" : hasDrawing ? "笔记已保存，点击“继续涂画”修改。" : "需要批注时再展开画布，不遮挡正常答题。"}</p>
+          </section>` : ""}
         </article>
         <div class="practice-footer">
           <button class="secondary-button" data-action="prev-question" ${session.index === 0 ? "disabled" : ""}>上一题</button>
@@ -1103,9 +1805,10 @@
     inNotebook,
     hasDrawing
   }) {
-    const drawingAllowed = drawingEnabledForMode(session.mode);
+    const overlayAllowed = drawingEnabledForMode(session.mode, "overlay");
+    const paperAllowed = drawingEnabledForMode(session.mode, "paper");
     const noteMode =
-      drawingAllowed && STATE.settings.noteMode === "draw" ? "draw" : "type";
+      paperAllowed && STATE.settings.noteMode === "draw" ? "draw" : "type";
     const noteText = STATE.notes?.[question.id] || "";
     return `
       <main class="wrong-study-page">
@@ -1117,20 +1820,21 @@
           </div>
           <div class="practice-counter"><strong>${session.index + 1}</strong><small>/ ${session.queue.length}</small></div>
         </div>
-        <div class="wrong-workspace" id="wrong-workspace">
+        <div class="wrong-workspace ${overlayDrawingMode ? "overlay-active" : ""}" id="wrong-workspace">
           <div class="workspace-top" id="workspace-top">
             <section class="workspace-pane workspace-question" id="workspace-question-pane">
               <div class="workspace-title">
                 <strong>题目</strong>
                 <span class="badge neutral">${question.type === "multi" ? "多选" : "单选"}</span>
               </div>
-              <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px">
+              <div class="workspace-meta-actions" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px">
                 <span class="badge">${escapeHtml(question.chapter)}</span>
                 ${STATE.wrong[question.id] ? `<span class="badge gold">错 ${STATE.wrong[question.id].wrongCount} 次</span>` : ""}
                 <button class="notebook-chip ${inNotebook ? "active" : ""}" data-action="toggle-notebook" data-id="${question.id}">${inNotebook ? "已加入笔记本" : "加入笔记本"}</button>
-                ${drawingAllowed ? `<button class="drawing-toggle ${overlayDrawingMode ? "active" : ""}" data-action="toggle-overlay-ink">${overlayDrawingMode ? "关闭题干涂鸦" : "开启题干涂鸦"}</button>` : ""}
+                <button class="notebook-chip ${STATE.wrong[question.id] ? "active" : ""}" data-action="toggle-wrongbook" data-id="${question.id}">${STATE.wrong[question.id] ? "已加入错题本" : "加入错题本"}</button>
+                ${overlayAllowed ? `<button class="drawing-toggle ${overlayDrawingMode ? "active" : ""}" data-action="toggle-overlay-ink">${overlayDrawingMode ? "关闭全局涂鸦" : "开启全局涂鸦"}</button>` : ""}
               </div>
-              ${drawingAllowed && overlayDrawingMode ? inkToolsMarkup(true) : ""}
+              ${overlayAllowed && overlayDrawingMode ? inkToolsMarkup(true) : ""}
               <div class="question-drawing-surface" id="question-drawing-surface">
                 <h2 class="question-title">${question.number}. ${escapeHtml(question.stem)}</h2>
                 <div class="options">
@@ -1144,7 +1848,6 @@
                     </button>`;
                   }).join("")}
                 </div>
-                ${drawingAllowed ? `<canvas id="question-drawing-canvas" class="question-drawing-canvas ${overlayDrawingMode ? "active" : ""}" data-question-id="${question.id}"></canvas>` : ""}
               </div>
               <div class="workspace-controls">
                 <button class="secondary-button" data-action="prev-question" ${session.index === 0 ? "disabled" : ""}>上一题</button>
@@ -1159,7 +1862,7 @@
             <section class="workspace-pane workspace-note">
               <div class="note-tabs">
                 <button class="${noteMode === "type" ? "active" : ""}" data-action="note-mode" data-mode="type">纸张 · 打字</button>
-                ${drawingAllowed ? `<button class="${noteMode === "draw" ? "active" : ""}" data-action="note-mode" data-mode="draw">纸张 · 手写</button>` : ""}
+                ${paperAllowed ? `<button class="${noteMode === "draw" ? "active" : ""}" data-action="note-mode" data-mode="draw">纸张 · 手写</button>` : ""}
               </div>
               <div class="note-content">
                 ${noteMode === "type" ? `
@@ -1195,6 +1898,7 @@
               </div>
             ` : '<div class="workspace-empty">提交答案后，这里会显示正确答案和解析。</div>'}
           </section>
+          ${overlayAllowed ? `<canvas id="question-drawing-canvas" class="question-drawing-canvas workspace-overlay-canvas ${overlayDrawingMode ? "active" : ""}" data-question-id="${question.id}"></canvas>` : ""}
         </div>
       </main>
     `;
@@ -1298,18 +2002,70 @@
           </div>
 
           <div class="setting-block">
-            <div class="setting-label"><strong>分模式涂鸦</strong><small>关闭后隐藏该模式的手写入口，已有笔记不会删除</small></div>
-            <div class="toggle-row">
-              <div><strong>普通刷题</strong><br><small class="muted">章节练习和随机练习</small></div>
-              <button class="switch ${settings.drawing?.practice !== false ? "on" : ""}" data-action="toggle-drawing-mode" data-mode="practice" aria-pressed="${settings.drawing?.practice !== false}"></button>
+            <div class="setting-label"><strong>全局字体</strong><small>数字和英文自动使用 Times New Roman</small></div>
+            <div class="font-choice-grid">
+              ${Object.entries(FONT_PRESETS).map(([key, label]) => `
+                <button class="font-choice ${settings.contentFont === key ? "active" : ""}" data-action="content-font" data-font="${key}">
+                  ${label}
+                </button>
+              `).join("")}
             </div>
-            <div class="toggle-row">
-              <div><strong>错题本练习</strong><br><small class="muted">题干涂鸦与纸张手写</small></div>
-              <button class="switch ${settings.drawing?.wrong !== false ? "on" : ""}" data-action="toggle-drawing-mode" data-mode="wrong" aria-pressed="${settings.drawing?.wrong !== false}"></button>
+          </div>
+
+          <div class="setting-block">
+            <div class="setting-label"><strong>全局主题</strong><small>马卡龙、动漫主题与自然景观</small></div>
+            <select id="theme-select" class="settings-select" aria-label="选择全局主题">
+              ${THEME_FAMILIES.map((family) => `
+                <optgroup label="${escapeHtml(family.label)}">
+                  ${family.themes.map((theme) => `
+                    <option value="${theme.id}" ${settings.themeStyle === theme.id ? "selected" : ""}>${escapeHtml(theme.name)}</option>
+                  `).join("")}
+                </optgroup>
+              `).join("")}
+            </select>
+            <div class="theme-preview-line">
+              <span style="background:${THEME_CATALOG.get(settings.themeStyle)?.paper || "#f4f1e8"}"></span>
+              <span style="background:${THEME_CATALOG.get(settings.themeStyle)?.surface || "#fffdf8"}"></span>
+              <span style="background:${THEME_CATALOG.get(settings.themeStyle)?.deep || "#ebe6d8"}"></span>
+              <span style="background:${THEME_CATALOG.get(settings.themeStyle)?.accent || "#176b4e"}"></span>
+              <small>${escapeHtml(THEME_CATALOG.get(settings.themeStyle)?.name || "原纸色")}</small>
             </div>
+          </div>
+
+          <div class="setting-block">
+            <div class="setting-label"><strong>分模式涂鸦</strong><small>全局涂鸦与纸张手写可分别关闭，已有内容不会删除</small></div>
+            ${[
+              ["practice", "普通刷题", "章节和随机练习"],
+              ["wrong", "错题本", "错题复习页面"],
+              ["notebook", "笔记本", "标记题目练习"]
+            ].map(([key, title, description]) => {
+              const value = settings.drawing?.[key];
+              const overlayOn = typeof value === "boolean" ? value : value?.overlay !== false;
+              const paperOn = typeof value === "boolean" ? value : value?.paper !== false;
+              return `<div class="drawing-mode-row">
+                <div><strong>${title}</strong><br><small class="muted">${description}</small></div>
+                <div class="drawing-mode-switches">
+                  <label>全局<button class="switch ${overlayOn ? "on" : ""}" data-action="toggle-drawing-mode" data-mode="${key}" data-channel="overlay" aria-pressed="${overlayOn}"></button></label>
+                  <label>纸张<button class="switch ${paperOn ? "on" : ""}" data-action="toggle-drawing-mode" data-mode="${key}" data-channel="paper" aria-pressed="${paperOn}"></button></label>
+                </div>
+              </div>`;
+            }).join("")}
+          </div>
+
+          <div class="setting-block">
             <div class="toggle-row">
-              <div><strong>笔记本练习</strong><br><small class="muted">题干涂鸦与纸张手写</small></div>
-              <button class="switch ${settings.drawing?.notebook !== false ? "on" : ""}" data-action="toggle-drawing-mode" data-mode="notebook" aria-pressed="${settings.drawing?.notebook !== false}"></button>
+              <div><strong>图形辅助</strong><br><small class="muted">手写字自动整理为直线、圆/椭圆或矩形，并可移动缩放</small></div>
+              <button class="switch ${settings.assistEnabled ? "on" : ""}" data-action="toggle-assist" aria-label="切换图形辅助" aria-pressed="${settings.assistEnabled}"></button>
+            </div>
+          </div>
+
+          <div class="setting-block">
+            <div class="setting-label"><strong>荧光笔透明度</strong><small>整层统一透明度，重复涂抹不会继续变深</small></div>
+            <div class="font-stepper">
+              <span></span>
+              <input id="highlighter-opacity-input" type="range" min="0.08" max="0.75" step="0.01" value="${settings.highlighterOpacity}" aria-label="荧光笔透明度" />
+              <span></span>
+              <output>${Math.round(settings.highlighterOpacity * 100)}%</output>
             </div>
           </div>
 
@@ -1349,6 +2105,24 @@
                   <span class="sound-preview" data-action="preview-sound" data-sound="${key}" title="试听">▶</span>
                 </button>
               `).join("")}
+            </div>
+          </div>
+
+          <div class="setting-block">
+            <div class="toggle-row">
+              <div><strong>全局背景音乐</strong><br><small class="muted">首次点按页面后开始播放</small></div>
+              <button class="switch ${settings.musicEnabled ? "on" : ""}" data-action="toggle-music" aria-label="切换背景音乐" aria-pressed="${settings.musicEnabled}"></button>
+            </div>
+            <select id="music-track" class="settings-select" aria-label="选择背景音乐" style="margin-top:10px">
+              ${Object.entries(MUSIC_PRESETS).map(([key, label]) => `
+                <option value="${key}" ${settings.musicTrack === key ? "selected" : ""}>${label}</option>
+              `).join("")}
+            </select>
+            <div class="font-stepper" style="margin-top:9px">
+              <span></span>
+              <input id="music-volume-input" type="range" min="0.03" max="0.4" step="0.01" value="${settings.musicVolume}" aria-label="背景音乐音量" />
+              <span></span>
+              <output>${Math.round((settings.musicVolume / 0.4) * 100)}%</output>
             </div>
           </div>
 
@@ -1411,7 +2185,7 @@
     questionExplanationMode = STATE.settings.explanationMode;
     drawingMode =
       (mode === "wrong" || mode === "notebook") &&
-      drawingEnabledForMode(mode) &&
+      drawingEnabledForMode(mode, "paper") &&
       STATE.settings.noteMode === "draw";
     drawingQuestionId = "";
     overlayDrawingMode = false;
@@ -1477,6 +2251,7 @@
       wrong.wrongCount += 1;
       wrong.correctStreak = 0;
       wrong.mastered = false;
+      wrong.manual = false;
       wrong.lastWrongAt = Date.now();
       STATE.wrong[question.id] = wrong;
     }
@@ -1589,6 +2364,8 @@
     if (STATE.notes) delete STATE.notes[question.id];
     deleteDrawingData(question.id);
     deleteDrawingData(`overlay:${question.id}`);
+    deleteDrawingData(`vector:${question.id}`);
+    deleteDrawingData(`vector:overlay:${question.id}`);
     if (drawingQuestionId === question.id) {
       drawingMode = false;
       drawingQuestionId = "";
@@ -1650,14 +2427,21 @@
       const mode = ["practice", "wrong", "notebook"].includes(target.dataset.mode)
         ? target.dataset.mode
         : "practice";
-      STATE.settings.drawing[mode] = STATE.settings.drawing[mode] === false;
-      if (STATE.settings.drawing[mode] === false) {
+      const channel = target.dataset.channel === "overlay" ? "overlay" : "paper";
+      const currentValue = STATE.settings.drawing[mode];
+      const current = typeof currentValue === "boolean"
+        ? currentValue
+        : currentValue?.[channel] !== false;
+      STATE.settings.drawing[mode] = typeof currentValue === "object" && currentValue !== null
+        ? { ...currentValue, [channel]: !current }
+        : { overlay: current, paper: current, [channel]: !current };
+      if (!current) {
         if (mode === "wrong" || mode === "notebook") {
-          if (STATE.settings.noteMode === "draw") {
+          if (channel === "paper" && STATE.settings.noteMode === "draw") {
             drawingMode = false;
           }
         }
-        overlayDrawingMode = false;
+        if (channel === "overlay") overlayDrawingMode = false;
       }
       saveState();
       render();
@@ -1670,6 +2454,27 @@
       STATE.settings.theme = STATE.settings.theme === "dark" ? "light" : "dark";
       applyPreferences();
       saveState();
+      render();
+    } else if (action === "content-font") {
+      STATE.settings.contentFont = FONT_STACKS[target.dataset.font]
+        ? target.dataset.font
+        : "sans";
+      applyPreferences();
+      saveState();
+      render();
+    } else if (action === "toggle-assist") {
+      STATE.settings.assistEnabled = !STATE.settings.assistEnabled;
+      if (!STATE.settings.assistEnabled) {
+        shapeSelectMode = false;
+        selectedShapeId = "";
+      }
+      saveState();
+      render();
+    } else if (action === "toggle-music") {
+      STATE.settings.musicEnabled = !STATE.settings.musicEnabled;
+      saveState();
+      if (STATE.settings.musicEnabled) startBackgroundMusic();
+      else stopBackgroundMusic();
       render();
     } else if (action === "toggle-sound") {
       STATE.settings.soundEnabled = !STATE.settings.soundEnabled;
@@ -1734,43 +2539,54 @@
         else setNotebookState(question, true);
         render();
       }
+    } else if (action === "toggle-wrongbook") {
+      const session = STATE.activeSession;
+      const question = session && QUESTION_MAP.get(session.queue[session.index]);
+      if (question) toggleManualWrong(question);
     } else if (action === "note-mode") {
       const session = STATE.activeSession;
-      if (!session || !drawingEnabledForMode(session.mode)) return;
+      if (!session || !drawingEnabledForMode(session.mode, "paper")) return;
       STATE.settings.noteMode = target.dataset.mode === "draw" ? "draw" : "type";
       drawingMode = STATE.settings.noteMode === "draw";
       drawingUndoStack = [];
+      shapeSelectMode = false;
       saveState();
       render();
     } else if (action === "toggle-overlay-ink") {
       const session = STATE.activeSession;
-      if (!session || !drawingEnabledForMode(session.mode)) {
+      if (!session || !drawingEnabledForMode(session.mode, "overlay")) {
         showToast("当前模式的涂鸦功能已在设置中关闭");
         return;
       }
       overlayDrawingMode = !overlayDrawingMode;
       overlayUndoStack = [];
+      shapeSelectMode = false;
+      selectedShapeId = "";
       render();
     } else if (action === "undo-overlay") {
       const session = STATE.activeSession;
       const question = session && QUESTION_MAP.get(session.queue[session.index]);
       const canvas = document.getElementById("question-drawing-canvas");
-      if (question && canvas && overlayUndoStack.length) {
-        const context = canvas.getContext("2d");
-        context.putImageData(overlayUndoStack.pop(), 0, 0);
+      const model = canvas && canvasModels.get(canvas);
+      if (question && canvas && model?.items.length) {
+        const removed = model.items.pop();
+        if (removed?.id === selectedShapeId) selectedShapeId = "";
+        renderDrawingCanvas(canvas, model);
         saveCanvasSnapshot(question, canvas, "overlay");
+      } else {
+        showToast("没有可撤销的新笔迹");
       }
     } else if (action === "clear-overlay") {
       const session = STATE.activeSession;
       const question = session && QUESTION_MAP.get(session.queue[session.index]);
       const canvas = document.getElementById("question-drawing-canvas");
-      if (question && canvas) {
-        const context = canvas.getContext("2d");
-        context.save();
-        context.setTransform(1, 0, 0, 1, 0, 0);
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.restore();
+      const model = canvas && canvasModels.get(canvas);
+      if (question && canvas && model) {
+        model.items = [];
+        model.legacyImage = null;
         overlayUndoStack = [];
+        selectedShapeId = "";
+        renderDrawingCanvas(canvas, model);
         const existing = STATE.notebook[question.id];
         if (existing) {
           existing.hasOverlayDrawing = false;
@@ -1779,11 +2595,13 @@
           saveState();
         }
         deleteDrawingData(`overlay:${question.id}`);
+        deleteDrawingData(`vector:overlay:${question.id}`);
         render();
       }
     } else if (action === "toggle-drawing") {
       drawingMode = !drawingMode;
       drawingUndoStack = [];
+      shapeSelectMode = false;
       render();
     } else if (action === "draw-color") {
       drawingColor = target.dataset.color;
@@ -1794,33 +2612,66 @@
         ? target.dataset.brush
         : "pen";
       drawingEraser = false;
+      shapeSelectMode = false;
       render();
     } else if (action === "draw-width") {
       drawingWidth = Number(target.dataset.width) || 3;
       render();
     } else if (action === "toggle-eraser") {
       drawingEraser = !drawingEraser;
+      shapeSelectMode = false;
       render();
+    } else if (action === "toggle-shape-select") {
+      if (!STATE.settings.assistEnabled) {
+        showToast("请先在设置中开启图形辅助");
+        return;
+      }
+      shapeSelectMode = !shapeSelectMode;
+      if (!shapeSelectMode) selectedShapeId = "";
+      drawingEraser = false;
+      render();
+    } else if (action === "delete-shape") {
+      const session = STATE.activeSession;
+      const question = session && QUESTION_MAP.get(session.queue[session.index]);
+      const inkTarget = target.closest("[data-ink-target]")?.dataset.inkTarget || "paper";
+      const canvas = document.getElementById(
+        inkTarget === "overlay" ? "question-drawing-canvas" : "drawing-canvas"
+      );
+      const model = canvas && canvasModels.get(canvas);
+      if (question && canvas && model && selectedShapeId) {
+        model.items = model.items.filter((item) => item.id !== selectedShapeId);
+        selectedShapeId = "";
+        renderDrawingCanvas(canvas, model);
+        saveCanvasSnapshot(
+          question,
+          canvas,
+          inkTarget
+        );
+      }
     } else if (action === "undo-drawing") {
       const session = STATE.activeSession;
       const question = session && QUESTION_MAP.get(session.queue[session.index]);
       const canvas = document.getElementById("drawing-canvas");
-      if (question && canvas && drawingUndoStack.length) {
-        const context = canvas.getContext("2d");
-        context.putImageData(drawingUndoStack.pop(), 0, 0);
+      const model = canvas && canvasModels.get(canvas);
+      if (question && canvas && model?.items.length) {
+        const removed = model.items.pop();
+        if (removed?.id === selectedShapeId) selectedShapeId = "";
+        renderDrawingCanvas(canvas, model);
         saveCanvasSnapshot(question, canvas);
+      } else {
+        showToast("没有可撤销的新笔迹");
       }
     } else if (action === "clear-drawing") {
       const session = STATE.activeSession;
       const question = session && QUESTION_MAP.get(session.queue[session.index]);
       const canvas = document.getElementById("drawing-canvas");
-      if (question && canvas) {
-        const context = canvas.getContext("2d");
-        context.save();
-        context.setTransform(1, 0, 0, 1, 0, 0);
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.restore();
+      const model = canvas && canvasModels.get(canvas);
+      if (question && canvas && model) {
+        model.items = [];
+        model.legacyImage = null;
         drawingUndoStack = [];
+        selectedShapeId = "";
+        renderDrawingCanvas(canvas, model);
         const existing = STATE.notebook[question.id];
         if (existing) {
           existing.hasPaperDrawing = false;
@@ -1829,6 +2680,7 @@
           saveState();
         }
         deleteDrawingData(question.id);
+        deleteDrawingData(`vector:${question.id}`);
         render();
       }
     } else if (action === "random-sheet") {
@@ -1896,7 +2748,10 @@
         sheet = null;
         drawingMode = false;
         overlayDrawingMode = false;
+        shapeSelectMode = false;
+        selectedShapeId = "";
         drawingQuestionId = "";
+        stopBackgroundMusic();
         clearAllDrawingData();
         applyPreferences();
         saveState();
@@ -1933,11 +2788,54 @@
       const output = event.target.parentElement?.querySelector("output");
       if (output) output.textContent = lineHeight.toFixed(1);
     }
+    if (event.target.id === "highlighter-opacity-input") {
+      const opacity = Math.min(0.75, Math.max(0.08, Number(event.target.value)));
+      STATE.settings.highlighterOpacity = opacity;
+      const output = event.target.parentElement?.querySelector("output");
+      if (output) output.textContent = `${Math.round(opacity * 100)}%`;
+      for (const canvasId of ["question-drawing-canvas", "drawing-canvas"]) {
+        const canvas = document.getElementById(canvasId);
+        const model = canvas && canvasModels.get(canvas);
+        if (canvas && model) renderDrawingCanvas(canvas, model);
+      }
+      saveState();
+    }
+    if (event.target.id === "music-volume-input") {
+      const volume = Math.min(0.4, Math.max(0.03, Number(event.target.value)));
+      STATE.settings.musicVolume = volume;
+      if (musicEngine) {
+        musicEngine.master.gain.setTargetAtTime(
+          volume,
+          musicEngine.master.context.currentTime,
+          0.08
+        );
+      }
+      const output = event.target.parentElement?.querySelector("output");
+      if (output) output.textContent = `${Math.round((volume / 0.4) * 100)}%`;
+      saveState();
+    }
   });
 
   app.addEventListener("change", (event) => {
-    if (event.target.id !== "background-file") return;
-    setBackgroundFromFile(event.target.files?.[0]);
+    if (event.target.id === "background-file") {
+      setBackgroundFromFile(event.target.files?.[0]);
+      return;
+    }
+    if (event.target.id === "theme-select") {
+      const nextTheme = event.target.value;
+      STATE.settings.themeStyle = THEME_CATALOG.has(nextTheme) ? nextTheme : "paper";
+      applyPreferences();
+      saveState();
+      render();
+      return;
+    }
+    if (event.target.id === "music-track") {
+      STATE.settings.musicTrack = MUSIC_PRESETS[event.target.value]
+        ? event.target.value
+        : "piano";
+      saveState();
+      if (STATE.settings.musicEnabled) startBackgroundMusic();
+    }
   });
 
   app.addEventListener("focusout", (event) => {
