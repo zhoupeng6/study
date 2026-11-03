@@ -1,0 +1,249 @@
+{
+  "note": "User-provided wallpaper files; cropped to remove screenshot chrome and black bars.",
+  "targetSize": [
+    900,
+    1950
+  ],
+  "items": [
+    {
+      "id": "conan-01",
+      "group": "conan",
+      "groupTitle": "柯南 · 侦探现场",
+      "groupShort": "柯南",
+      "title": "雨夜追踪",
+      "src": "./assets/wallpapers/conan-01.jpg",
+      "thumb": "./assets/wallpapers/thumbs/conan-01.jpg",
+      "sourceFile": "微信图片_20261103180826_901_2.jpg"
+    },
+    {
+      "id": "conan-02",
+      "group": "conan",
+      "groupTitle": "柯南 · 侦探现场",
+      "groupShort": "柯南",
+      "title": "镜片后的真相",
+      "src": "./assets/wallpapers/conan-02.jpg",
+      "thumb": "./assets/wallpapers/thumbs/conan-02.jpg",
+      "sourceFile": "微信图片_20261103180829_902_2.jpg"
+    },
+    {
+      "id": "conan-03",
+      "group": "conan",
+      "groupTitle": "柯南 · 侦探现场",
+      "groupShort": "柯南",
+      "title": "少年侦探团",
+      "src": "./assets/wallpapers/conan-03.jpg",
+      "thumb": "./assets/wallpapers/thumbs/conan-03.jpg",
+      "sourceFile": "微信图片_20261103180831_903_2.jpg"
+    },
+    {
+      "id": "conan-04",
+      "group": "conan",
+      "groupTitle": "柯南 · 侦探现场",
+      "groupShort": "柯南",
+      "title": "月光怪盗",
+      "src": "./assets/wallpapers/conan-04.jpg",
+      "thumb": "./assets/wallpapers/thumbs/conan-04.jpg",
+      "sourceFile": "微信图片_20261103180835_904_2.jpg"
+    },
+    {
+      "id": "conan-05",
+      "group": "conan",
+      "groupTitle": "柯南 · 侦探现场",
+      "groupShort": "柯南",
+      "title": "线索之间",
+      "src": "./assets/wallpapers/conan-05.jpg",
+      "thumb": "./assets/wallpapers/thumbs/conan-05.jpg",
+      "sourceFile": "微信图片_20261103180838_905_2.jpg"
+    },
+    {
+      "id": "conan-06",
+      "group": "conan",
+      "groupTitle": "柯南 · 侦探现场",
+      "groupShort": "柯南",
+      "title": "暗处的疑问",
+      "src": "./assets/wallpapers/conan-06.jpg",
+      "thumb": "./assets/wallpapers/thumbs/conan-06.jpg",
+      "sourceFile": "微信图片_20261103181350_923_2.jpg"
+    },
+    {
+      "id": "conan-07",
+      "group": "conan",
+      "groupTitle": "柯南 · 侦探现场",
+      "groupShort": "柯南",
+      "title": "走廊尽头",
+      "src": "./assets/wallpapers/conan-07.jpg",
+      "thumb": "./assets/wallpapers/thumbs/conan-07.jpg",
+      "sourceFile": "微信图片_20261103181356_925_2.jpg"
+    },
+    {
+      "id": "conan-08",
+      "group": "conan",
+      "groupTitle": "柯南 · 侦探现场",
+      "groupShort": "柯南",
+      "title": "阴影中的侦探",
+      "src": "./assets/wallpapers/conan-08.jpg",
+      "thumb": "./assets/wallpapers/thumbs/conan-08.jpg",
+      "sourceFile": "微信图片_20261103181404_927_2.jpg"
+    },
+    {
+      "id": "conan-09",
+      "group": "conan",
+      "groupTitle": "柯南 · 侦探现场",
+      "groupShort": "柯南",
+      "title": "案件档案",
+      "src": "./assets/wallpapers/conan-09.jpg",
+      "thumb": "./assets/wallpapers/thumbs/conan-09.jpg",
+      "sourceFile": "s.jpg"
+    },
+    {
+      "id": "shinchan-01",
+      "group": "shinchan",
+      "groupTitle": "蜡笔小新 · 日常",
+      "groupShort": "小新",
+      "title": "窗边小憩",
+      "src": "./assets/wallpapers/shinchan-01.jpg",
+      "thumb": "./assets/wallpapers/thumbs/shinchan-01.jpg",
+      "sourceFile": "微信图片_20261103180956_909_2.jpg"
+    },
+    {
+      "id": "shinchan-02",
+      "group": "shinchan",
+      "groupTitle": "蜡笔小新 · 日常",
+      "groupShort": "小新",
+      "title": "午后读书",
+      "src": "./assets/wallpapers/shinchan-02.jpg",
+      "thumb": "./assets/wallpapers/thumbs/shinchan-02.jpg",
+      "sourceFile": "微信图片_20261103181000_910_2.jpg"
+    },
+    {
+      "id": "shinchan-03",
+      "group": "shinchan",
+      "groupTitle": "蜡笔小新 · 日常",
+      "groupShort": "小新",
+      "title": "春日部伙伴",
+      "src": "./assets/wallpapers/shinchan-03.jpg",
+      "thumb": "./assets/wallpapers/thumbs/shinchan-03.jpg",
+      "sourceFile": "微信图片_20261103181003_911_2.jpg"
+    },
+    {
+      "id": "shinchan-04",
+      "group": "shinchan",
+      "groupTitle": "蜡笔小新 · 日常",
+      "groupShort": "小新",
+      "title": "晴空散步",
+      "src": "./assets/wallpapers/shinchan-04.jpg",
+      "thumb": "./assets/wallpapers/thumbs/shinchan-04.jpg",
+      "sourceFile": "微信图片_20261103181008_912_2.jpg"
+    },
+    {
+      "id": "shinchan-05",
+      "group": "shinchan",
+      "groupTitle": "蜡笔小新 · 日常",
+      "groupShort": "小新",
+      "title": "树荫下",
+      "src": "./assets/wallpapers/shinchan-05.jpg",
+      "thumb": "./assets/wallpapers/thumbs/shinchan-05.jpg",
+      "sourceFile": "微信图片_20261103181013_913_2.jpg"
+    },
+    {
+      "id": "shinchan-06",
+      "group": "shinchan",
+      "groupTitle": "蜡笔小新 · 日常",
+      "groupShort": "小新",
+      "title": "快乐起跳",
+      "src": "./assets/wallpapers/shinchan-06.jpg",
+      "thumb": "./assets/wallpapers/thumbs/shinchan-06.jpg",
+      "sourceFile": "微信图片_20261103181016_914_2.jpg"
+    },
+    {
+      "id": "shinchan-07",
+      "group": "shinchan",
+      "groupTitle": "蜡笔小新 · 日常",
+      "groupShort": "小新",
+      "title": "白云与花",
+      "src": "./assets/wallpapers/shinchan-07.jpg",
+      "thumb": "./assets/wallpapers/thumbs/shinchan-07.jpg",
+      "sourceFile": "微信图片_20261103181019_915_2.jpg"
+    },
+    {
+      "id": "shinchan-08",
+      "group": "shinchan",
+      "groupTitle": "蜡笔小新 · 日常",
+      "groupShort": "小新",
+      "title": "雨夜归家",
+      "src": "./assets/wallpapers/shinchan-08.jpg",
+      "thumb": "./assets/wallpapers/thumbs/shinchan-08.jpg",
+      "sourceFile": "微信图片_20261103181022_916_2.jpg"
+    },
+    {
+      "id": "shinchan-09",
+      "group": "shinchan",
+      "groupTitle": "蜡笔小新 · 日常",
+      "groupShort": "小新",
+      "title": "木屋小店",
+      "src": "./assets/wallpapers/shinchan-09.jpg",
+      "thumb": "./assets/wallpapers/thumbs/shinchan-09.jpg",
+      "sourceFile": "微信图片_20261103181026_917_2.jpg"
+    },
+    {
+      "id": "shinchan-10",
+      "group": "shinchan",
+      "groupTitle": "蜡笔小新 · 日常",
+      "groupShort": "小新",
+      "title": "河上泛舟",
+      "src": "./assets/wallpapers/shinchan-10.jpg",
+      "thumb": "./assets/wallpapers/thumbs/shinchan-10.jpg",
+      "sourceFile": "微信图片_20261103181029_918_2.jpg"
+    },
+    {
+      "id": "kid-01",
+      "group": "kid",
+      "groupTitle": "怪盗基德 · 月光",
+      "groupShort": "基德",
+      "title": "月光魔术师",
+      "src": "./assets/wallpapers/kid-01.jpg",
+      "thumb": "./assets/wallpapers/thumbs/kid-01.jpg",
+      "sourceFile": "微信图片_20261103181332_919_2.jpg"
+    },
+    {
+      "id": "kid-02",
+      "group": "kid",
+      "groupTitle": "怪盗基德 · 月光",
+      "groupShort": "基德",
+      "title": "白色礼帽",
+      "src": "./assets/wallpapers/kid-02.jpg",
+      "thumb": "./assets/wallpapers/thumbs/kid-02.jpg",
+      "sourceFile": "微信图片_20261103181336_920_2.jpg"
+    },
+    {
+      "id": "kid-03",
+      "group": "kid",
+      "groupTitle": "怪盗基德 · 月光",
+      "groupShort": "基德",
+      "title": "红色预告函",
+      "src": "./assets/wallpapers/kid-03.jpg",
+      "thumb": "./assets/wallpapers/thumbs/kid-03.jpg",
+      "sourceFile": "微信图片_20261103181341_921_2.jpg"
+    },
+    {
+      "id": "kid-04",
+      "group": "kid",
+      "groupTitle": "怪盗基德 · 月光",
+      "groupShort": "基德",
+      "title": "白色披风",
+      "src": "./assets/wallpapers/kid-04.jpg",
+      "thumb": "./assets/wallpapers/thumbs/kid-04.jpg",
+      "sourceFile": "微信图片_20261103181345_922_2.jpg"
+    },
+    {
+      "id": "kid-05",
+      "group": "kid",
+      "groupTitle": "怪盗基德 · 月光",
+      "groupShort": "基德",
+      "title": "扑克牌之夜",
+      "src": "./assets/wallpapers/kid-05.jpg",
+      "thumb": "./assets/wallpapers/thumbs/kid-05.jpg",
+      "sourceFile": "微信图片_20261103181400_926_2.jpg"
+    }
+  ]
+}

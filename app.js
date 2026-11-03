@@ -59,7 +59,12 @@
     return Object.entries(COLOR_SERIES).flatMap(([color, variants]) =>
       variants.map((variant) => ({
         id: `${prefix}-${color}-${variant.tone}`,
-        name: `${label} · ${labels[color]}${variant.tone}`,
+        name: `${label} · ${labels[color]}${variant.tone}${
+          (prefix === "conan" && color === "blue" && variant.tone === "晴蓝") ||
+          (prefix === "shinchan" && color === "pink" && variant.tone === "浅樱")
+            ? " · 装扮样张"
+            : ""
+        }`,
         family: prefix,
         paper: variant.paper,
         surface: variant.surface,
@@ -124,6 +129,8 @@
   let QUESTIONS = [];
   let QUESTION_MAP = new Map();
   let CHAPTER_MAP = new Map();
+  let WALLPAPERS = [];
+  let WALLPAPER_MAP = new Map();
   let STATE = loadState();
   let page = { name: "home", part: null, wrongTab: "pending" };
   let sheet = null;
@@ -166,6 +173,7 @@
         explanationMode: "detailed",
         theme: "light",
         backgroundImage: "",
+        wallpaperId: "theme",
         soundEnabled: true,
         soundPreset: "drop",
         noteMode: "type",
@@ -215,6 +223,16 @@
       if (!THEME_CATALOG.has(settings.themeStyle)) settings.themeStyle = "paper";
       if (!FONT_STACKS[settings.contentFont]) settings.contentFont = "sans";
       if (!MUSIC_PRESETS[settings.musicTrack]) settings.musicTrack = "piano";
+      if (parsed?.settings?.wallpaperId === undefined && settings.backgroundImage) {
+        settings.wallpaperId = "custom";
+      }
+      if (
+        settings.wallpaperId !== "theme" &&
+        settings.wallpaperId !== "custom" &&
+        !/^(?:conan|shinchan|kid)-\d{2}$/.test(settings.wallpaperId || "")
+      ) {
+        settings.wallpaperId = settings.backgroundImage ? "custom" : "theme";
+      }
       settings.highlighterOpacity = Math.min(
         0.75,
         Math.max(0.08, Number(settings.highlighterOpacity) || 0.28)
@@ -241,6 +259,48 @@
     }
   }
 
+  function themeWallpaperForCurrentTheme() {
+    const theme = currentTheme();
+    const color = theme.id.split("-")[1] || "";
+    const mappings = {
+      conan: {
+        pink: "conan-02",
+        green: "conan-05",
+        blue: "conan-01",
+        black: "conan-08"
+      },
+      shinchan: {
+        pink: "shinchan-03",
+        green: "shinchan-05",
+        blue: "shinchan-07",
+        black: "shinchan-08"
+      }
+    };
+    const wallpaperId = mappings[theme.family]?.[color];
+    return wallpaperId ? WALLPAPER_MAP.get(wallpaperId) || null : null;
+  }
+
+  function selectedWallpaper() {
+    const wallpaperId = STATE.settings.wallpaperId || "theme";
+    if (wallpaperId === "theme") return themeWallpaperForCurrentTheme();
+    if (wallpaperId === "custom") {
+      return STATE.settings.backgroundImage
+        ? {
+            id: "custom",
+            title: "自定义壁纸",
+            src: STATE.settings.backgroundImage,
+            thumb: STATE.settings.backgroundImage
+          }
+        : null;
+    }
+    return WALLPAPER_MAP.get(wallpaperId) || null;
+  }
+
+  function wallpaperName() {
+    const wallpaper = selectedWallpaper();
+    return wallpaper?.title || "跟随主题";
+  }
+
   function applyPreferences() {
     const size = Math.min(36, Math.max(10, Number(STATE.settings.fontSize) || 15));
     const lineHeight = Math.min(
@@ -252,6 +312,7 @@
     const isDark = STATE.settings.theme === "dark";
     document.documentElement.dataset.theme = STATE.settings.theme === "dark" ? "dark" : "light";
     document.documentElement.dataset.themeFamily = theme.family;
+    document.documentElement.dataset.themeStyle = STATE.settings.themeStyle;
     document.documentElement.style.setProperty("--reading-size", `${size}px`);
     document.documentElement.style.setProperty("--reading-line-height", String(lineHeight));
     document.documentElement.style.setProperty(
@@ -266,14 +327,14 @@
       "--reading-body-weight",
       isBold ? "650" : "400"
     );
+    const wallpaper = selectedWallpaper();
+    document.documentElement.dataset.wallpaper = wallpaper ? "image" : "theme";
     document.documentElement.style.setProperty(
       "--custom-background",
-      STATE.settings.backgroundImage
-        ? `url("${STATE.settings.backgroundImage}")`
-        : "none"
+      wallpaper?.src ? `url("${wallpaper.src}")` : "none"
     );
     if (backgroundNode) {
-      backgroundNode.style.opacity = STATE.settings.backgroundImage ? "1" : "0";
+      backgroundNode.style.opacity = wallpaper ? "1" : "0";
     }
     const palette = {
       paper: theme.paper,
@@ -332,6 +393,59 @@
     const value = STATE.settings.drawing?.[key];
     if (typeof value === "boolean") return value;
     return value?.[channel] !== false;
+  }
+
+  function currentTheme() {
+    return THEME_CATALOG.get(STATE.settings.themeStyle) || THEME_CATALOG.get("paper");
+  }
+
+  function themeBrandMark() {
+    const theme = currentTheme();
+    if (theme.id === "conan-blue-晴蓝") return "柯";
+    if (theme.id === "shinchan-pink-浅樱") return "新";
+    return "1000";
+  }
+
+  function themeHeroDecor() {
+    const theme = currentTheme();
+    if (theme.id === "conan-blue-晴蓝") {
+      return `<div class="theme-hero-art detective-theme-art" aria-hidden="true">
+        <svg viewBox="0 0 280 220">
+          <circle cx="220" cy="55" r="42" class="theme-moon"/>
+          <path d="M26 173c35-13 46-37 71-51 27-16 69-4 92 23 18 22 36 31 64 34" class="theme-line"/>
+          <circle cx="150" cy="95" r="35" class="detective-head"/>
+          <path d="M116 86c7-35 63-52 80-10l-10 3c-15-25-43-22-56 8Z" class="detective-hair"/>
+          <circle cx="137" cy="94" r="15" class="detective-glasses"/>
+          <circle cx="164" cy="94" r="15" class="detective-glasses"/>
+          <path d="M151 94h-0.5M122 90l-20-7M179 90l18-7" class="detective-glasses"/>
+          <path d="M132 112c10 8 28 8 38 0" class="theme-line"/>
+          <path d="M124 132c16-10 38-10 53 0l14 57c-27 17-63 16-84 1Z" class="detective-coat"/>
+          <path d="m143 140 9 7 9-7 7 13-16 11-16-11Z" class="detective-bowtie"/>
+          <circle cx="70" cy="142" r="38" class="magnifier-ring"/>
+          <path d="m98 171 30 29" class="magnifier-handle"/>
+          <path d="M239 138h20M249 128v20" class="theme-crosshair"/>
+        </svg>
+        <span class="theme-case-stamp">CASE FILE · 真相只有一个</span>
+      </div>`;
+    }
+    if (theme.id === "shinchan-pink-浅樱") {
+      return `<div class="theme-hero-art shinchan-theme-art" aria-hidden="true">
+        <svg viewBox="0 0 280 220">
+          <circle cx="221" cy="48" r="34" class="crayon-sun"/>
+          <path d="M25 61c14-18 29-18 43 0 18-19 37-14 46 7H25Z" class="crayon-cloud"/>
+          <path d="M89 75c34-27 84-24 111 6 20 22 26 58 10 83-19 30-88 38-118 11-30-27-34-76-3-100Z" class="crayon-face"/>
+          <path d="M107 102c11-12 24-11 34 0M155 100c10-11 23-10 32 0" class="crayon-brows"/>
+          <path d="M123 118c3 3 6 3 9 0M160 117c3 3 6 3 9 0" class="crayon-eyes"/>
+          <path d="M128 139c14 11 32 10 44-1" class="crayon-mouth"/>
+          <path d="M82 159c-20 16-29 32-31 51M199 161c21 15 29 30 32 49" class="crayon-arms"/>
+          <path d="M116 153c11-7 29-7 39 0l15 55h-73Z" class="crayon-shirt"/>
+          <path d="m211 112 8-18 8 18 19 7-19 7-8 19-8-19-18-7Z" class="crayon-star"/>
+          <path d="M34 121c17 4 23 11 27 26M38 156c11-7 20-8 31-4" class="crayon-scribble"/>
+        </svg>
+        <span class="theme-case-stamp"> crayon club · 今天也要元气满满 </span>
+      </div>`;
+    }
+    return "";
   }
 
   function conciseExplanation(question) {
@@ -593,6 +707,22 @@
         if (!response.ok) throw new Error(`题库读取失败：${response.status}`);
         DATA = await response.json();
       }
+      try {
+        if (window.__XIAO1000_WALLPAPERS__) {
+          WALLPAPERS = window.__XIAO1000_WALLPAPERS__;
+        } else {
+          const wallpaperResponse = await fetch("./assets/wallpapers/wallpapers.json", {
+            cache: "no-store"
+          });
+          if (wallpaperResponse.ok) {
+            const wallpaperData = await wallpaperResponse.json();
+            WALLPAPERS = Array.isArray(wallpaperData.items) ? wallpaperData.items : [];
+          }
+        }
+      } catch {
+        WALLPAPERS = [];
+      }
+      WALLPAPER_MAP = new Map(WALLPAPERS.map((wallpaper) => [wallpaper.id, wallpaper]));
       QUESTIONS = DATA.questions.map(normalizeQuestion);
       QUESTION_MAP = new Map(QUESTIONS.map((question) => [question.id, question]));
       for (const part of DATA.parts || []) {
@@ -1388,7 +1518,7 @@
   function topbar() {
     const header = page.name === "home"
       ? `<div class="brand">
-           <div class="brand-mark">1000</div>
+           <div class="brand-mark">${themeBrandMark()}</div>
            <div><h1>肖1000 · 轻刷题</h1><p>专注选择题 · 本地保存</p></div>
          </div>
          <button class="icon-button" data-action="open-settings" aria-label="设置">${icons.settings}</button>`
@@ -1445,6 +1575,7 @@
 
     return `
       <section class="hero">
+        ${themeHeroDecor()}
         <p class="eyebrow" style="color:#b8d5c8">2027 考研政治</p>
         <h2>${session && !session.finished ? "接着刚才的进度，继续刷题。" : "把一道题，练成下意识的判断。"}</h2>
         <p>${session && !session.finished ? "本次选择会自动保存，退出应用也不会丢失。" : "点选项立即判题，显示答案与解析；错题自动累计，可从高到低集中复习。"}</p>
@@ -1965,9 +2096,20 @@
     if (sheet.type === "settings") {
       const current = stats();
       const settings = STATE.settings;
-      const previewStyle = settings.backgroundImage
-        ? `style="--preview-background:url(&quot;${settings.backgroundImage}&quot;)"`
-        : "";
+      const wallpaperGroups = [];
+      for (const wallpaper of WALLPAPERS) {
+        let group = wallpaperGroups.find((item) => item.id === wallpaper.group);
+        if (!group) {
+          group = {
+            id: wallpaper.group,
+            title: wallpaper.groupTitle,
+            items: []
+          };
+          wallpaperGroups.push(group);
+        }
+        group.items.push(wallpaper);
+      }
+      const themeWallpaper = themeWallpaperForCurrentTheme();
       return `<div class="sheet-backdrop" data-action="close-sheet">
         <section class="sheet" role="dialog" aria-modal="true" aria-label="刷题设置" data-sheet-content>
           <h3>刷题设置</h3>
@@ -2084,12 +2226,52 @@
             </div>
           </div>
 
-          <div class="setting-block">
-            <div class="setting-label"><strong>自定义背景</strong><small>从手机相册选择</small></div>
-            <div class="background-preview" ${previewStyle}></div>
-            <div class="background-actions">
-              <label class="file-button">选择图片<input id="background-file" type="file" accept="image/*" /></label>
-              <button class="secondary-button" data-action="reset-background">恢复默认</button>
+          <div class="setting-block wallpaper-setting">
+            <div class="setting-label">
+              <strong>主题壁纸</strong>
+              <small>当前：${escapeHtml(wallpaperName())}</small>
+            </div>
+            <p class="wallpaper-help">选择壁纸后会直接替换主题自带背景，主题颜色、选框和装饰仍然保留。</p>
+            <div class="wallpaper-group">
+              <div class="wallpaper-group-title"><strong>跟随主题</strong><small>不额外设置壁纸</small></div>
+              <div class="wallpaper-rail">
+                <button class="wallpaper-choice theme-wallpaper-choice ${settings.wallpaperId === "theme" ? "active" : ""}"
+                  data-action="select-wallpaper" data-wallpaper="theme">
+                  ${
+                    themeWallpaper
+                      ? `<img src="${escapeHtml(themeWallpaper.thumb)}" alt="${escapeHtml(themeWallpaper.title)}" />`
+                      : `<span class="wallpaper-theme-preview">${escapeHtml(currentTheme().name)}</span>`
+                  }
+                  <span class="wallpaper-caption"><strong>主题自带壁纸</strong><small>${escapeHtml(themeWallpaper?.title || "随主题自动变化")}</small></span>
+                </button>
+                <label class="wallpaper-choice custom-wallpaper-choice ${settings.wallpaperId === "custom" ? "active" : ""}">
+                  ${
+                    settings.backgroundImage
+                      ? `<img src="${settings.backgroundImage}" alt="自定义壁纸预览" />`
+                      : '<span class="wallpaper-upload-mark">＋</span>'
+                  }
+                  <span class="wallpaper-caption"><strong>本地图片</strong><small>从相册选择</small></span>
+                  <input id="background-file" type="file" accept="image/*" />
+                </label>
+              </div>
+            </div>
+            ${wallpaperGroups.map((group) => `
+              <div class="wallpaper-group">
+                <div class="wallpaper-group-title"><strong>${escapeHtml(group.title)}</strong><small>${group.items.length} 张</small></div>
+                <div class="wallpaper-rail">
+                  ${group.items.map((wallpaper) => `
+                    <button class="wallpaper-choice ${settings.wallpaperId === wallpaper.id ? "active" : ""}"
+                      data-action="select-wallpaper" data-wallpaper="${escapeHtml(wallpaper.id)}">
+                      <img src="${escapeHtml(wallpaper.thumb)}" alt="${escapeHtml(wallpaper.title)}" loading="lazy" />
+                      <span class="wallpaper-caption"><strong>${escapeHtml(wallpaper.title)}</strong><small>${escapeHtml(wallpaper.groupShort)}</small></span>
+                    </button>
+                  `).join("")}
+                </div>
+              </div>
+            `).join("")}
+            <div class="background-actions" style="margin-top:10px">
+              <label class="file-button">上传自己的壁纸<input id="background-file-secondary" type="file" accept="image/*" /></label>
+              <button class="secondary-button" data-action="reset-background">改用主题背景</button>
             </div>
           </div>
 
@@ -2322,6 +2504,7 @@
       return;
     }
     const previous = STATE.settings.backgroundImage;
+    const previousWallpaperId = STATE.settings.wallpaperId;
     showToast("正在处理背景图片…");
     const reader = new FileReader();
     reader.onerror = () => showToast("图片读取失败，请重新选择");
@@ -2337,8 +2520,10 @@
         const context = canvas.getContext("2d");
         context.drawImage(image, 0, 0, canvas.width, canvas.height);
         STATE.settings.backgroundImage = canvas.toDataURL("image/jpeg", 0.82);
+        STATE.settings.wallpaperId = "custom";
         if (!saveState()) {
           STATE.settings.backgroundImage = previous;
+          STATE.settings.wallpaperId = previousWallpaperId;
           return;
         }
         applyPreferences();
@@ -2489,10 +2674,20 @@
       playAnswerSound(target.dataset.sound, true);
     } else if (action === "reset-background") {
       STATE.settings.backgroundImage = "";
+      STATE.settings.wallpaperId = "theme";
       saveState();
       applyPreferences();
       render();
-      showToast("已恢复默认背景");
+      showToast("已改用主题背景");
+    } else if (action === "select-wallpaper") {
+      const wallpaperId = target.dataset.wallpaper;
+      if (wallpaperId === "theme" || WALLPAPER_MAP.has(wallpaperId)) {
+        STATE.settings.wallpaperId = wallpaperId;
+        saveState();
+        applyPreferences();
+        render();
+        showToast(wallpaperId === "theme" ? "已改用主题背景" : "壁纸已更换");
+      }
     } else if (action === "toggle-explanation") {
       questionExplanationMode = target.dataset.mode;
       render();
@@ -2817,7 +3012,10 @@
   });
 
   app.addEventListener("change", (event) => {
-    if (event.target.id === "background-file") {
+    if (
+      event.target.id === "background-file" ||
+      event.target.id === "background-file-secondary"
+    ) {
       setBackgroundFromFile(event.target.files?.[0]);
       return;
     }
