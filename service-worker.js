@@ -1,9 +1,9 @@
-const CACHE_NAME = "xiao1000-v3";
+const CACHE_NAME = "xiao1000-v4";
 const APP_ASSETS = [
   "./",
   "./index.html",
-  "./styles.css",
-  "./app.js",
+  "./styles.css?v=20261103-4",
+  "./app.js?v=20261103-4",
   "./icon.svg",
   "./icon-192.png",
   "./icon-512.png",
@@ -28,14 +28,14 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
   event.respondWith(
-    caches.match(event.request).then(
-      (cached) =>
-        cached ||
-        fetch(event.request).then((response) => {
+    fetch(event.request)
+      .then((response) => {
+        if (response.ok && new URL(event.request.url).origin === self.location.origin) {
           const copy = response.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
-          return response;
-        })
-    )
+        }
+        return response;
+      })
+      .catch(() => caches.match(event.request))
   );
 });
