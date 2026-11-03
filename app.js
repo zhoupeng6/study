@@ -66,6 +66,11 @@
         soundEnabled: true,
         soundPreset: "drop",
         noteMode: "type",
+        drawing: {
+          practice: true,
+          wrong: true,
+          notebook: true
+        },
         workspace: {
           leftRatio: 0.58,
           topRatio: 0.62
@@ -82,6 +87,10 @@
       settings.workspace = {
         ...defaults.settings.workspace,
         ...(parsed?.settings?.workspace || {})
+      };
+      settings.drawing = {
+        ...defaults.settings.drawing,
+        ...(parsed?.settings?.drawing || {})
       };
       if (parsed?.settings && parsed.settings.lineHeight === undefined) {
         settings.fontSize = 15;
@@ -142,6 +151,11 @@
         STATE.settings.theme === "dark" ? "#151916" : "#f4f1e8"
       );
     }
+  }
+
+  function drawingEnabledForMode(mode) {
+    const key = mode === "wrong" ? "wrong" : mode === "notebook" ? "notebook" : "practice";
+    return STATE.settings.drawing?.[key] !== false;
   }
 
   function conciseExplanation(question) {
@@ -987,6 +1001,7 @@
     const canShowAnswer = question.answerLetters.length > 0;
     const inNotebook = isInNotebook(question.id);
     const hasDrawing = Boolean(STATE.notebook[question.id]?.hasDrawing);
+    const drawingAllowed = drawingEnabledForMode("practice");
     if (session.mode === "wrong" || session.mode === "notebook") {
       return renderWrongStudyPage({
         session,
@@ -1019,20 +1034,25 @@
             <span class="badge neutral">${escapeHtml(question.chapter)}</span>
             ${STATE.wrong[question.id] ? `<span class="badge gold">错 ${STATE.wrong[question.id].wrongCount} 次</span>` : ""}
             <button class="notebook-chip ${inNotebook ? "active" : ""}" data-action="toggle-notebook" data-id="${question.id}">${inNotebook ? "已加入笔记本" : "加入笔记本"}</button>
+            ${drawingAllowed ? `<button class="drawing-toggle ${overlayDrawingMode ? "active" : ""}" data-action="toggle-overlay-ink">${overlayDrawingMode ? "关闭题干涂鸦" : "开启题干涂鸦"}</button>` : ""}
           </div>
-          <h2 class="question-title">${question.number}. ${escapeHtml(question.stem)}</h2>
-          <div class="options">
-            ${["A", "B", "C", "D"].filter((letter) => question.options[letter]).map((letter) => {
-              const isCorrectAnswer = answered && question.answerLetters.includes(letter);
-              const isWrongSelected = answered && response.selected.includes(letter) && !isCorrectAnswer;
-              return `<button class="option-button ${selected.includes(letter) ? "selected" : ""} ${isCorrectAnswer ? "correct" : ""} ${isWrongSelected ? "wrong" : ""}"
-                data-action="select-option" data-letter="${letter}" ${answered ? "disabled" : ""}>
-                <span class="option-letter">${letter}</span>
-                <span class="option-text">${escapeHtml(question.options[letter])}</span>
-              </button>`;
-            }).join("")}
+          ${drawingAllowed && overlayDrawingMode ? inkToolsMarkup(true) : ""}
+          <div class="question-drawing-surface" id="question-drawing-surface">
+            <h2 class="question-title">${question.number}. ${escapeHtml(question.stem)}</h2>
+            <div class="options">
+              ${["A", "B", "C", "D"].filter((letter) => question.options[letter]).map((letter) => {
+                const isCorrectAnswer = answered && question.answerLetters.includes(letter);
+                const isWrongSelected = answered && response.selected.includes(letter) && !isCorrectAnswer;
+                return `<button class="option-button ${selected.includes(letter) ? "selected" : ""} ${isCorrectAnswer ? "correct" : ""} ${isWrongSelected ? "wrong" : ""}"
+                  data-action="select-option" data-letter="${letter}" ${answered ? "disabled" : ""}>
+                  <span class="option-letter">${letter}</span>
+                  <span class="option-text">${escapeHtml(question.options[letter])}</span>
+                </button>`;
+              }).join("")}
+            </div>
+            ${drawingAllowed ? `<canvas id="question-drawing-canvas" class="question-drawing-canvas ${overlayDrawingMode ? "active" : ""}" data-question-id="${question.id}"></canvas>` : ""}
           </div>
-          <section class="drawing-section">
+          ${drawingAllowed ? `<section class="drawing-section">
             <div class="drawing-head">
               <strong>手写批注${hasDrawing ? " · 已有笔记" : ""}</strong>
               <button class="drawing-toggle ${drawingMode ? "active" : ""}" data-action="toggle-drawing">${drawingMode ? "收起画笔" : hasDrawing ? "继续涂画" : "开始涂画"}</button>
@@ -1042,7 +1062,7 @@
               <canvas id="drawing-canvas" class="drawing-canvas ${drawingMode ? "" : "locked"}" data-question-id="${question.id}"></canvas>
             </div>` : ""}
             <p class="drawing-hint">${drawingMode ? "可用手指或 Apple Pencil 书写；起笔后自动存入笔记本。" : hasDrawing ? "笔记已保存，点击“继续涂画”修改。" : "需要批注时再展开画布，不遮挡正常答题。"}</p>
-          </section>
+          </section>` : ""}
           ${answered ? `
             <section class="feedback ${response.correct ? "" : "wrong"}">
               <div class="feedback-title">
@@ -1083,7 +1103,9 @@
     inNotebook,
     hasDrawing
   }) {
-    const noteMode = STATE.settings.noteMode === "draw" ? "draw" : "type";
+    const drawingAllowed = drawingEnabledForMode(session.mode);
+    const noteMode =
+      drawingAllowed && STATE.settings.noteMode === "draw" ? "draw" : "type";
     const noteText = STATE.notes?.[question.id] || "";
     return `
       <main class="wrong-study-page">
@@ -1106,9 +1128,9 @@
                 <span class="badge">${escapeHtml(question.chapter)}</span>
                 ${STATE.wrong[question.id] ? `<span class="badge gold">错 ${STATE.wrong[question.id].wrongCount} 次</span>` : ""}
                 <button class="notebook-chip ${inNotebook ? "active" : ""}" data-action="toggle-notebook" data-id="${question.id}">${inNotebook ? "已加入笔记本" : "加入笔记本"}</button>
-                <button class="drawing-toggle ${overlayDrawingMode ? "active" : ""}" data-action="toggle-overlay-ink">${overlayDrawingMode ? "关闭题干涂鸦" : "开启题干涂鸦"}</button>
+                ${drawingAllowed ? `<button class="drawing-toggle ${overlayDrawingMode ? "active" : ""}" data-action="toggle-overlay-ink">${overlayDrawingMode ? "关闭题干涂鸦" : "开启题干涂鸦"}</button>` : ""}
               </div>
-              ${overlayDrawingMode ? inkToolsMarkup(true) : ""}
+              ${drawingAllowed && overlayDrawingMode ? inkToolsMarkup(true) : ""}
               <div class="question-drawing-surface" id="question-drawing-surface">
                 <h2 class="question-title">${question.number}. ${escapeHtml(question.stem)}</h2>
                 <div class="options">
@@ -1122,7 +1144,7 @@
                     </button>`;
                   }).join("")}
                 </div>
-                <canvas id="question-drawing-canvas" class="question-drawing-canvas ${overlayDrawingMode ? "active" : ""}" data-question-id="${question.id}"></canvas>
+                ${drawingAllowed ? `<canvas id="question-drawing-canvas" class="question-drawing-canvas ${overlayDrawingMode ? "active" : ""}" data-question-id="${question.id}"></canvas>` : ""}
               </div>
               <div class="workspace-controls">
                 <button class="secondary-button" data-action="prev-question" ${session.index === 0 ? "disabled" : ""}>上一题</button>
@@ -1137,7 +1159,7 @@
             <section class="workspace-pane workspace-note">
               <div class="note-tabs">
                 <button class="${noteMode === "type" ? "active" : ""}" data-action="note-mode" data-mode="type">纸张 · 打字</button>
-                <button class="${noteMode === "draw" ? "active" : ""}" data-action="note-mode" data-mode="draw">纸张 · 手写</button>
+                ${drawingAllowed ? `<button class="${noteMode === "draw" ? "active" : ""}" data-action="note-mode" data-mode="draw">纸张 · 手写</button>` : ""}
               </div>
               <div class="note-content">
                 ${noteMode === "type" ? `
@@ -1276,6 +1298,22 @@
           </div>
 
           <div class="setting-block">
+            <div class="setting-label"><strong>分模式涂鸦</strong><small>关闭后隐藏该模式的手写入口，已有笔记不会删除</small></div>
+            <div class="toggle-row">
+              <div><strong>普通刷题</strong><br><small class="muted">章节练习和随机练习</small></div>
+              <button class="switch ${settings.drawing?.practice !== false ? "on" : ""}" data-action="toggle-drawing-mode" data-mode="practice" aria-pressed="${settings.drawing?.practice !== false}"></button>
+            </div>
+            <div class="toggle-row">
+              <div><strong>错题本练习</strong><br><small class="muted">题干涂鸦与纸张手写</small></div>
+              <button class="switch ${settings.drawing?.wrong !== false ? "on" : ""}" data-action="toggle-drawing-mode" data-mode="wrong" aria-pressed="${settings.drawing?.wrong !== false}"></button>
+            </div>
+            <div class="toggle-row">
+              <div><strong>笔记本练习</strong><br><small class="muted">题干涂鸦与纸张手写</small></div>
+              <button class="switch ${settings.drawing?.notebook !== false ? "on" : ""}" data-action="toggle-drawing-mode" data-mode="notebook" aria-pressed="${settings.drawing?.notebook !== false}"></button>
+            </div>
+          </div>
+
+          <div class="setting-block">
             <div class="setting-label"><strong>解析默认展示</strong><small>答题中仍可单独切换</small></div>
             <div class="segmented">
               <button class="${settings.explanationMode === "concise" ? "active" : ""}" data-action="explanation-setting" data-mode="concise">简洁版</button>
@@ -1371,7 +1409,10 @@
     };
     pendingSelection = [];
     questionExplanationMode = STATE.settings.explanationMode;
-    drawingMode = (mode === "wrong" || mode === "notebook") && STATE.settings.noteMode === "draw";
+    drawingMode =
+      (mode === "wrong" || mode === "notebook") &&
+      drawingEnabledForMode(mode) &&
+      STATE.settings.noteMode === "draw";
     drawingQuestionId = "";
     overlayDrawingMode = false;
     sheet = null;
@@ -1605,6 +1646,21 @@
       applyPreferences();
       saveState();
       render();
+    } else if (action === "toggle-drawing-mode") {
+      const mode = ["practice", "wrong", "notebook"].includes(target.dataset.mode)
+        ? target.dataset.mode
+        : "practice";
+      STATE.settings.drawing[mode] = STATE.settings.drawing[mode] === false;
+      if (STATE.settings.drawing[mode] === false) {
+        if (mode === "wrong" || mode === "notebook") {
+          if (STATE.settings.noteMode === "draw") {
+            drawingMode = false;
+          }
+        }
+        overlayDrawingMode = false;
+      }
+      saveState();
+      render();
     } else if (action === "explanation-setting") {
       STATE.settings.explanationMode = target.dataset.mode;
       questionExplanationMode = target.dataset.mode;
@@ -1679,12 +1735,19 @@
         render();
       }
     } else if (action === "note-mode") {
+      const session = STATE.activeSession;
+      if (!session || !drawingEnabledForMode(session.mode)) return;
       STATE.settings.noteMode = target.dataset.mode === "draw" ? "draw" : "type";
       drawingMode = STATE.settings.noteMode === "draw";
       drawingUndoStack = [];
       saveState();
       render();
     } else if (action === "toggle-overlay-ink") {
+      const session = STATE.activeSession;
+      if (!session || !drawingEnabledForMode(session.mode)) {
+        showToast("当前模式的涂鸦功能已在设置中关闭");
+        return;
+      }
       overlayDrawingMode = !overlayDrawingMode;
       overlayUndoStack = [];
       render();
